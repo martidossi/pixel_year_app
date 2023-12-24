@@ -1,5 +1,5 @@
 streamlit==1.22
-# st-gsheets-connection
+st-gsheets-connection
 pandas
 numpy
 matplotlib
