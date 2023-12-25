@@ -1,6 +1,7 @@
 streamlit==1.22
-git+https://github.com/streamlit/gsheets-connection
 st-gsheets-connection
+git+https://github.com/streamlit/gsheets-connection
+st-gsheets-connection @ git+https://github.com/streamlit/gsheets-connection
 streamlit_gsheets
 pandas
 numpy
