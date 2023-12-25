@@ -1,10 +1,6 @@
-streamlit==1.22
-st-gsheets-connection
-git+https://github.com/streamlit/gsheets-connection
-st-gsheets-connection @ git+https://github.com/streamlit/gsheets-connection
-streamlit_gsheets
-pandas
-numpy
-matplotlib
-seaborn
-plotly
+matplotlib==3.6.0
+numpy==1.23.4
+pandas==1.5.1
+seaborn==0.13.0
+st_gsheets_connection==0.0.3
+streamlit==1.29.0
