@@ -4,3 +4,4 @@ pandas==1.5.1
 seaborn==0.13.0
 st_gsheets_connection==0.0.3
 streamlit==1.29.0
+git+https://github.com/streamlit/gsheets-connection
