@@ -9,18 +9,6 @@ import sys
 from utils import *
 sys.path.insert(0, "..")
 local_css("style.css")
-
-css_font = """
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300&display=swap');
-    html, body, [class*="css"] {
-    font-family: 'Inter', sans-serif; 
-    font-size: 18px;
-    font-weight: 500;
-    color: #091747;
-}
-"""
-st.markdown(f'<style>{css_font}</style>', unsafe_allow_html=True)
-
     
 ## Setting
 #st.set_page_config(
@@ -57,7 +45,7 @@ pixel_val_map = {
 }
 
 pixel_col_map = {
-    '0': '#b3b3b3',
+    '0': '#ebebeb',
     'Missing': '#000000',
     'Happy': '#ffd92f',
     'Normal': '#fc8d62', 
@@ -68,16 +56,13 @@ pixel_col_map = {
 
 for col in data.columns:
     data[col] = data[col].map(pixel_val_map)    
-col_hex = sns.color_palette("Set2", 8).as_hex()
 
-
-
-fig, ax = plt.subplots(figsize=(5, 8))
+fig, ax = plt.subplots(figsize=(10, 10))
 ax = sns.heatmap(
     data.transpose(),
     cmap=list(pixel_col_map.values()),
     cbar=False,
-    linewidths=1,
+    linewidths=1.2,
     linecolor='white',
     square=True,
     xticklabels=1,
@@ -85,23 +70,25 @@ ax = sns.heatmap(
 )
 #ax.xaxis.tick_top() # x axis on top
 #ax.xaxis.set_label_position('top')
-
-ax.set_yticklabels(labels=['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'], rotation=0, fontsize=6)
-ax.set_xticklabels(labels=list(data.index), rotation=0, fontsize=6)
+ax.set_yticklabels(labels=['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'], rotation=0, fontsize=8)
+ax.set_xticklabels(labels=list(data.index), rotation=0, fontsize=8)
 ax.set_xlabel('')
 st.pyplot(fig)
 
 with st.expander('**Legenda:**', expanded=False):
-    col1, col2, col3 = st.columns([1,1,1])
+    col1, col2, col3, col4 = st.columns([1,1,1, 1])
     with col1:
-        t = "<div><span class='highlight blue'>Happy</span></div>"
-        st.markdown(t, unsafe_allow_html=True)
+        st.markdown("<div><span class='highlight happy'>Happy</span></div>", unsafe_allow_html=True)
+        st.markdown("<div><span class='highlight happy'>Happy</span></div>", unsafe_allow_html=True) 
     with col2:
-        t = "<div><span class='highlight blue'>Happy</span></div>"
-        st.markdown(t, unsafe_allow_html=True)
+        st.markdown("<div><span class='highlight happy'>Happy</span></div>", unsafe_allow_html=True)
+        st.markdown("<div><span class='highlight happy'>Happy</span></div>", unsafe_allow_html=True)
     with col3:
-        t = "<div><span class='highlight blue'>Happy</span></div>"
-        st.markdown(t, unsafe_allow_html=True)
+        st.markdown("<div><span class='highlight happy'>Happy</span></div>", unsafe_allow_html=True)
+        st.markdown("<div><span class='highlight happy'>Happy</span></div>", unsafe_allow_html=True)
+    with col4:
+        st.markdown("<div><span class='highlight happy'>Happy</span></div>", unsafe_allow_html=True)
+        st.markdown("<div><span class='highlight happy'>Happy</span></div>", unsafe_allow_html=True)
     st.markdown('#')
     
 st.subheader('Some references')
