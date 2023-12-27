@@ -15,17 +15,58 @@
   background-color: lightblue;
 }
 
-.happy_dot {
-    height: 14px;
-    width: 14px;
-    background-color: #ffd92f;
-    border-radius: 50%;
-    display: inline-block;
-}
-
 .happy_square {
     height: 12px;
     width: 12px;
-    background-color: #ffd92f;
+    background-color: #f78ac7;
+    display: inline-block;
+}
+
+.loved_square {
+    height: 12px;
+    width: 12px;
+    background-color: #f88595;
+    display: inline-block;
+}
+
+.confident_square {
+    height: 12px;
+    width: 12px;
+    background-color: #fa9c7d;
+    display: inline-block;
+}
+
+.playful_square {
+    height: 12px;
+    width: 12px;
+    background-color: #fbc779;
+    display: inline-block;
+}
+
+.embarassed_square {
+    height: 12px;
+    width: 12px;
+    background-color: #6ad2a7;
+    display: inline-block;
+}
+
+.angry_square {
+    height: 12px;
+    width: 12px;
+    background-color: #7ccdf8;
+    display: inline-block;
+}
+
+.scared_square {
+    height: 12px;
+    width: 12px;
+    background-color: #8d9dfa;
+    display: inline-block;
+}
+
+.sad_square {
+    height: 12px;
+    width: 12px;
+    background-color: #c78dfc;
     display: inline-block;
 }
