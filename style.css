@@ -14,3 +14,18 @@
 .red {
   background-color: lightblue;
 }
+
+.happy_dot {
+    height: 14px;
+    width: 14px;
+    background-color: #ffd92f;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.happy_square {
+    height: 12px;
+    width: 12px;
+    background-color: #ffd92f;
+    display: inline-block;
+}

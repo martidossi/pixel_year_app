@@ -75,11 +75,11 @@ ax.set_xticklabels(labels=list(data.index), rotation=0, fontsize=8)
 ax.set_xlabel('')
 st.pyplot(fig)
 
-with st.expander('**Legenda:**', expanded=False):
+with st.expander('**Legenda**', expanded=False):
     col1, col2, col3, col4 = st.columns([1,1,1, 1])
     with col1:
-        st.markdown("<div><span class='highlight happy'>Happy</span></div>", unsafe_allow_html=True)
-        st.markdown("<div><span class='highlight happy'>Happy</span></div>", unsafe_allow_html=True) 
+        st.markdown("<span class='happy_dot'></span> Happy", unsafe_allow_html=True)
+        st.markdown("<span class='happy_square'></span> Happy", unsafe_allow_html=True)
     with col2:
         st.markdown("<div><span class='highlight happy'>Happy</span></div>", unsafe_allow_html=True)
         st.markdown("<div><span class='highlight happy'>Happy</span></div>", unsafe_allow_html=True)
