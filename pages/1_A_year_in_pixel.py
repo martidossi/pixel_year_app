@@ -105,7 +105,7 @@ st.sidebar.markdown("[The emotion wheels](https://humansystems.co/emotionwheels/
 
 col1, col2 = st.columns([1, 2])
 with col1:
-    st.markdown("To determine which emotions to consider, I did some research and came across this emotions wheel. I'll be using the 8 internal emotions as my main reference and the external ones to help me in deciding between different states. I like that it's symmetrical, with warm colors for comfortable and positive emotions and cool colors for the others, so that for this initial attempt, I've decided to keep the same color scale. To learn more about the methodology behind this wheel, check out the *references*. Alternatively, you can watch this [video](https://www.youtube.com/watch?v=ehzj0UHIU9w&t=113s) to discover how it was created.")
+    st.markdown("To determine which emotions to consider, I did some research and came across this emotions wheel. I'll be using the 8 internal emotions as my main reference and the external ones to help me in deciding between different states. I like that it's symmetrical, with warm colors for comfortable and positive emotions and cool colors for the others, so that for this initial attempt, I've decided to keep the same color scale. To learn more about the methodology behind this wheel, check out the *references*. Alternatively, you can watch this [video](https://www.youtube.com/watch?v=ehzj0UHIU9w&t=113s) where the author describes the methodology used.")
 with col2:
     st.image("emotion-wheel.png", width=450)
 
