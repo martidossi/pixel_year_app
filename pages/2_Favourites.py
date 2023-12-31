@@ -7,6 +7,10 @@ col1, col2 = st.columns([1, 1])
 with col1:
     st.markdown('- Flatlandia (IT)')
     st.video("https://youtu.be/tNDhjYQKWt4?si=Nz_P00ESET4IoX-z")
+    st.markdown('- Visualization of PI being irrational')
+    st.video("https://www.youtube.com/watch?v=S32sIhukA9E&t=2s")
 with col2:
     st.markdown('- About popcorn and creativity (IT)')
     st.video("https://www.youtube.com/watch?v=Vv-cFqfM8GQ")
+    st.markdown('- Same stats different graphs')
+    st.video("https://www.youtube.com/watch?v=It4UA75z_KQ")
