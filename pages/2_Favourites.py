@@ -14,3 +14,53 @@ with col2:
     st.video("https://www.youtube.com/watch?v=Vv-cFqfM8GQ")
     st.markdown('- Same stats different graphs')
     st.video("https://www.youtube.com/watch?v=It4UA75z_KQ")
+    
+st.markdown("Lentamente muore
+chi diventa schiavo dell’abitudine,
+ripetendo ogni giorno gli stessi percorsi,
+chi non cambia la marcia,
+chi non rischia e cambia colore dei vestiti,
+chi non parla a chi non conosce.
+
+Muore lentamente
+chi evita una passione,
+chi preferisce il nero al bianco
+e i puntini sulle “i”
+piuttosto che un insieme di emozioni,
+proprio quelle che fanno brillare gli occhi,
+quelle che fanno di uno sbadiglio un sorriso,
+quelle che fanno battere il cuore
+davanti all’errore e ai sentimenti.
+
+Lentamente muore
+chi non capovolge il tavolo
+quando è infelice sul lavoro,
+chi non rischia la certezza per l’incertezza
+per inseguire un sogno,
+chi non si permette almeno una volta nella vita,
+di fuggire ai consigli sensati.
+
+Lentamente muore
+chi non viaggia,
+chi non legge,
+chi non ascolta musica,
+chi non trova grazia in se stesso.
+
+Muore lentamente
+chi distrugge l’amor proprio,
+chi non si lascia aiutare
+chi passa i giorni a lamentarsi
+della propria sfortuna o della pioggia incessante.
+
+Lentamente muore
+chi abbandona un progetto prima di iniziarlo,
+chi non fa domande sugli argomenti che non conosce
+o non risponde quando gli chiedono qualcosa che conosce.
+
+Evitiamo la morte a piccole dosi,
+ricordando sempre che essere vivo
+richiede uno sforzo di gran lunga maggiore
+del semplice fatto di respirare.
+
+Soltanto l’ardente pazienza
+porterà al raggiungimento di una splendida felicità.")
