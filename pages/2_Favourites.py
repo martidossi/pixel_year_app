@@ -9,7 +9,15 @@ s = f"<p style='font-size:32px; font-weight:normal; font-family:IBM Plex Sans'>{
 st.markdown(s, unsafe_allow_html=True)
 
 #######
-
+st.divider()
+st.markdown(
+    "<p style='font-size:14px; font-weight:normal; font-family:IBM Plex Sans'>26/01/2024</p>",
+    unsafe_allow_html=True
+    )
+s = f"<p style='font-size:18px; font-weight:bold; font-family:IBM Plex Sans'>Leggermente</p>"
+st.markdown(s, unsafe_allow_html=True)
+st.video("https://www.youtube.com/watch?v=2BAKDn4_Q9M")
+    
 st.divider()
 st.markdown(
     "<p style='font-size:14px; font-weight:normal; font-family:IBM Plex Sans'>20/01/2024</p>",

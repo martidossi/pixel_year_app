@@ -9,7 +9,7 @@ st.set_page_config(
 
 st.sidebar.header("Martina Dossi")
 st.sidebar.subheader("🎯 Reach me out")
-st.sidebar.markdown("- martinadossi.hello@gmail.com")
+st.sidebar.markdown("- martinadossi.hello at gmail.com")
 st.sidebar.markdown("- linkedin, IG, Behance")
 
 st.title("Hello!")
