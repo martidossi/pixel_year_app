@@ -4,4 +4,4 @@ matplotlib==3.6.0
 streamlit==1.29.0
 seaborn==0.13.0
 git+https://github.com/streamlit/gsheets-connection
-st_gsheets_connection==0.0.3
+st_gsheets_connection
