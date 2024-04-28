@@ -4,22 +4,22 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import yaml
 from streamlit_gsheets import GSheetsConnection
 import sys
 from utils import *
+
+## Setting
+st.set_page_config(
+    page_title="A year in pixel",
+    page_icon="🟧"
+)
+    
 sys.path.insert(0, "..")
 local_css("style.css")
-    
-## Setting
-#st.set_page_config(
-#    page_title="A year in pixel",
-#    page_icon="🟧"
-#)
 
-#st.set_page_config(layout="wide")
-
-st.title("A year in :rainbow[pixel]")
-st.markdown("A *pixel year* is a visual representation of one's emotions and experiences throughout the course of a year. In this concept, each day is assigned a specific color that encapsulates the predominant mood or feeling of that day.")
+st.title("A Year in :rainbow[Pixel]")
+st.markdown("A *Pixel Year* is a visual representation of personal emotions throughout the course of a year. Each day is assigned a specific color that refers to the predominant mood or feeling of that day.")
 
 st.subheader("**2024**")
 conn = st.connection("gsheets", type=GSheetsConnection)
@@ -29,61 +29,79 @@ data = conn.read(
     usecols=range(13),
     nrows=31
 )
-first_col = data.columns[0]
-data = data.rename(columns={first_col: 'id_day'})
-data = data.set_index('id_day')
-data = data.fillna('0')
 
-pixel_val_map = {
-    '0': 0,
-    'Missing': 1,
-    'Happy': 2,
-    'Loved': 3, 
-    'Confident': 4,
-    'Playful': 5,
-    'Embarassed': 6,
-    'Angry': 7,
-    'Scared': 8,
-    'Sad': 9,
-    
-}
-# from text to numbers
-for col in data.columns:
-    data[col] = data[col].map(pixel_val_map)
+with open("config.yml", 'r') as f:
+    cfg = yaml.safe_load(f)
 
-cmap_dict = {
-    0: '#ebebeb',
-    1: '#ffffff',
-    2: '#f78ac7',
-    3: '#f88595',
-    4: '#fa9c7d',
-    5: '#fbc779',
-    6: '#6ad2a7',
-    7: '#7ccdf8',
-    8: '#8d9dfa',
-    9: '#c78dfc'
-}
-cmap = list(cmap_dict.values())
+dict_emotion_id = cfg['map_emotion_id']
+dict_emotion_color = cfg['map_emotion_color']
+dict_emotion_intensity_id = cfg['map_emotion_intensity_id']
+dict_emotion_intensity_color = cfg['map_emotion_intensity_color']
 
-fig, ax = plt.subplots(figsize=(10, 10))
-ax = sns.heatmap(
-    data.transpose(),
-    cmap=cmap,
-    cbar=False,
-    linewidths=1.2,
-    linecolor='white',
-    square=True,
-    vmin=0,
-    vmax=len(cmap_dict),
-    xticklabels=1,
-    ax=ax
+#### df_emotion
+df_emotion = conn.read(
+    worksheet="pixel_year",
+    ttl="10m",
+    usecols=range(13),
+    nrows=31
 )
-ax.set_yticklabels(labels=['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'], rotation=0, fontsize=8)
-ax.set_xticklabels(labels=list(data.index), rotation=0, fontsize=8)
-ax.set_xlabel('')
-st.pyplot(fig)
+first_col = df_emotion.columns[0]
+df_emotion = df_emotion.rename(columns={first_col: 'id_day'})
+df_emotion = df_emotion.set_index('id_day')
+df_emotion = df_emotion.fillna('0')
 
-with st.expander('**Legenda**', expanded=False):
+# df emotion with numbers
+df_emotion_id = df_emotion.copy()
+df_emotion_id = (
+    pd.DataFrame([df_emotion_id[col].map(dict_emotion_id) for col in df_emotion_id.columns])
+    .transpose()
+    .fillna(0)
+    .astype(int)
+)
+
+#### df_intensity
+df_intensity = conn.read(
+    worksheet="pixel_year_intensity",
+    ttl="10m",
+    usecols=range(13),
+    nrows=31
+)
+
+first_col = df_intensity.columns[0]
+df_intensity = df_intensity.rename(columns={first_col: 'id_day'})
+df_intensity = df_intensity.set_index('id_day')
+df_intensity = df_intensity.fillna('0')
+
+df_intensity_id = df_intensity.copy()
+df_intensity_id = (
+    pd.DataFrame([df_intensity_id[col].map(dict_emotion_intensity_id) for col in df_intensity_id.columns])
+    .transpose()
+    .fillna(0)
+    .astype(int)
+)
+
+#### visualization (heatmap)
+tab1, tab2 = st.tabs(["Prevailing feeling", "Intensity"])
+with tab1:
+    fig, ax = plt.subplots(figsize=(10, 10))
+    ax = sns.heatmap(
+        df_emotion_id.transpose(),
+        cmap=list(dict_emotion_color.values()),
+        cbar=False,
+        linewidths=1.2,
+        linecolor='white',
+        square=True,
+        vmin=0,
+        vmax=len(dict_emotion_color),
+        xticklabels=1,
+        ax=ax
+    )
+
+    ax.set_yticklabels(labels=['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'], rotation=0, fontsize=8)
+    ax.set_xticklabels(labels=list(df_emotion_id.index), rotation=0, fontsize=8)
+    ax.set_xlabel('')
+    st.pyplot(fig)
+    st.markdown("**Legenda**")
     col1, col2, col3, col4 = st.columns([1, 1, 1, 1])
     with col1:
         st.markdown("<span class='happy_square'></span> Happy", unsafe_allow_html=True)
@@ -99,13 +117,39 @@ with st.expander('**Legenda**', expanded=False):
         st.markdown("<span class='sad_square'></span> Sad", unsafe_allow_html=True)
     st.markdown('#')
 
-st.sidebar.subheader('Some references')
-st.sidebar.markdown("[Happy Coding Blog](https://happycoding.io/blog/year-in-pixels-2019)")
-st.sidebar.markdown("[The emotion wheels](https://humansystems.co/emotionwheels/)")
+with tab2:
+    labels = df_intensity.transpose().replace('0', '').replace('Missing', '').replace(':|', '')
+    fig, ax = plt.subplots(figsize=(10, 10))
+    ax = sns.heatmap(
+        df_emotion_id.transpose(),
+        cmap=list(dict_emotion_color.values()),
+        cbar=False,
+        linewidths=1.2,
+        linecolor='white',
+        square=True,
+        vmin=0,
+        annot=labels,
+        fmt='',
+        vmax=len(dict_emotion_color),
+        xticklabels=1,
+        ax=ax
+    )
 
-col1, col2 = st.columns([1, 2])
-with col1:
-    st.markdown("To determine which emotions to consider, I did some research and came across this emotions wheel. I'll be using the 8 internal emotions as my main reference and the external ones to help me in deciding between different states. I like that it's symmetrical, with warm colors for comfortable and positive emotions and cool colors for the others, so that for this initial attempt, I've decided to keep the same color scale. To learn more about the methodology behind this wheel, check out the *references*. Alternatively, you can watch this [video](https://www.youtube.com/watch?v=ehzj0UHIU9w&t=113s) where the author describes the methodology used.")
-with col2:
-    st.image("emotion-wheel.png", width=450)
+    ax.set_yticklabels(labels=['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'], rotation=0, fontsize=8)
+    ax.set_xticklabels(labels=list(df_intensity_id.index), rotation=0, fontsize=8)
+    ax.set_xlabel('')
+    st.pyplot(fig)
+    st.markdown("**Legenda**")
+    st.markdown("Feelings may be linked to various intensities. Cells without any smile are just neutral, whereas positive pixels may be good :) or very good :)) days, as well as negative ones can be bad :( or very bad :(( days.")
 
+st.sidebar.subheader('References')
+st.sidebar.image("pics/emotion-wheel.png")
+st.sidebar.markdown("""
+    The emotion wheel depicted above serves as my primary reference. Specifically, I'll be focusing on the eight internal emotions (four positives, four negatives) as my main guide, while considering the external ones to aid in distinguishing between different states. To learn more about the methodology behind this wheel, check out the links below.
+    - [The emotion wheels](https://humansystems.co/emotionwheels/)
+    - [The methodology](https://www.youtube.com/watch?v=ehzj0UHIU9w&t=113s)
+    """)
+st.sidebar.subheader('Other inspirations')
+st.sidebar.markdown("""
+    - [Happy Coding Blog](https://happycoding.io/blog/year-in-pixels-2019)
+    """)

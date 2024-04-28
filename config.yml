@@ -1,0 +1,42 @@
+map_emotion_id:
+    0: 0
+    Missing: 1
+    Happy: 2
+    Loved: 3 
+    Confident: 4
+    Playful: 5
+    Embarassed: 6
+    Angry: 7
+    Scared: 8
+    Sad: 9
+    
+map_emotion_color:
+    0: '#ebebeb'
+    Missing: '#ffffff'
+    Happy: '#f7add6'
+    Loved: '#f2687f'
+    Confident: '#fa9c7d'
+    Playful: '#fbc779'
+    Embarassed: '#6ad2a7'
+    Angry: '#7ccdf8'
+    Scared: '#8d9dfa'
+    Sad: '#ca80e5'
+    
+map_emotion_intensity_id:
+    0: 0
+    Missing: 1
+    ':((': 2
+    ':(': 3
+    ':|': 4
+    ':)': 5
+    ':))': 6
+    
+map_emotion_intensity_color:
+    0: '#ebebeb'
+    Missing: '#ffffff'
+    ':((': '#8baac6'
+    ':(': '#b7d8ec'
+    ':|': '#ebebeb'
+    ':)': '#f7d5e2'
+    ':))': '#de9eb6'
+

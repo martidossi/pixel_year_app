@@ -5,3 +5,4 @@ streamlit==1.29.0
 seaborn==0.13.0
 git+https://github.com/streamlit/gsheets-connection
 st_gsheets_connection
+PyYAML

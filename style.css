@@ -18,14 +18,14 @@
 .happy_square {
     height: 12px;
     width: 12px;
-    background-color: #f78ac7;
+    background-color: #f7add6;
     display: inline-block;
 }
 
 .loved_square {
     height: 12px;
     width: 12px;
-    background-color: #f88595;
+    background-color: #f2687f;
     display: inline-block;
 }
 
@@ -67,6 +67,16 @@
 .sad_square {
     height: 12px;
     width: 12px;
-    background-color: #c78dfc;
+    background-color: #ca80e5;
     display: inline-block;
+}
+
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap'); 
+
+html, body, [class*="css"] {
+    font-family: 'Roboto', sans-serif; 
+    font-size: 14px;
+    font-weight: 400;
+    color: #091747;
 }

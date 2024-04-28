@@ -161,3 +161,5 @@ cython_debug/
 .streamlit/secrets.toml
 
 profile_pic.jpeg
+
+.streamlit/secrets.toml
