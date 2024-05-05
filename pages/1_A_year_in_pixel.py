@@ -18,69 +18,72 @@ st.set_page_config(
 sys.path.insert(0, "..")
 local_css("style.css")
 
+conn = st.connection("gsheets", type=GSheetsConnection)
+
+with open("config.yml", 'r') as f:
+    cfg = yaml.safe_load(f)
+    
+## Sidebar
+st.sidebar.subheader('References')
+st.sidebar.image("pics/emotion-wheel.png")
+st.sidebar.markdown("""
+    The emotion wheel depicted above serves as my primary reference. Specifically, I'll be focusing on the eight internal emotions (four positives, four negatives) as my main guide, while considering the external ones to aid in distinguishing between different states. To learn more about the methodology behind this wheel, check out the links below.
+    - [The emotion wheels](https://humansystems.co/emotionwheels/)
+    - [The methodology](https://www.youtube.com/watch?v=ehzj0UHIU9w&t=113s)
+    """)
+st.sidebar.subheader('Other inspirations')
+st.sidebar.markdown("""
+    - [Happy Coding Blog](https://happycoding.io/blog/year-in-pixels-2019)
+    """)
+
+## Title
 st.title("A Year in :rainbow[Pixel]")
 st.markdown("A *Pixel Year* is a visual representation of personal emotions throughout the course of a year. Each day is assigned a specific color that refers to the predominant mood or feeling of that day.")
 
 st.subheader("**2024**")
-conn = st.connection("gsheets", type=GSheetsConnection)
-data = conn.read(
-    worksheet="pixel_year",
-    ttl="10m",
-    usecols=range(13),
-    nrows=31
-)
 
-with open("config.yml", 'r') as f:
-    cfg = yaml.safe_load(f)
-
+   
+## Heatmap
 dict_emotion_id = cfg['map_emotion_id']
 dict_emotion_color = cfg['map_emotion_color']
-dict_emotion_intensity_id = cfg['map_emotion_intensity_id']
-dict_emotion_intensity_color = cfg['map_emotion_intensity_color']
 
-#### df_emotion
+# Emotion df
 df_emotion = conn.read(
     worksheet="pixel_year",
     ttl="10m",
     usecols=range(13),
     nrows=31
 )
-first_col = df_emotion.columns[0]
-df_emotion = df_emotion.rename(columns={first_col: 'id_day'})
-df_emotion = df_emotion.set_index('id_day')
-df_emotion = df_emotion.fillna('0')
+df_emotion = (
+    df_emotion
+    .rename(columns={'day/month': 'id_day'})
+    .set_index('id_day')
+    .fillna('0')
+)
 
-# df emotion with numbers
-df_emotion_id = df_emotion.copy()
+# Mapping emotions to numbers
 df_emotion_id = (
-    pd.DataFrame([df_emotion_id[col].map(dict_emotion_id) for col in df_emotion_id.columns])
+    pd.DataFrame([df_emotion[col].map(dict_emotion_id) for col in df_emotion.columns])
     .transpose()
     .fillna(0)
     .astype(int)
 )
 
-#### df_intensity
+# Emotion intensity
 df_intensity = conn.read(
     worksheet="pixel_year_intensity",
     ttl="10m",
     usecols=range(13),
     nrows=31
 )
-
-first_col = df_intensity.columns[0]
-df_intensity = df_intensity.rename(columns={first_col: 'id_day'})
-df_intensity = df_intensity.set_index('id_day')
-df_intensity = df_intensity.fillna('0')
-
-df_intensity_id = df_intensity.copy()
-df_intensity_id = (
-    pd.DataFrame([df_intensity_id[col].map(dict_emotion_intensity_id) for col in df_intensity_id.columns])
-    .transpose()
-    .fillna(0)
-    .astype(int)
+df_intensity = (
+    df_intensity
+    .rename(columns={'day/month': 'id_day'})
+    .set_index('id_day')
+    .fillna('0')
 )
 
-#### visualization (heatmap)
+# Visualization
 tab1, tab2 = st.tabs(["Prevailing feeling", "Intensity"])
 with tab1:
     fig, ax = plt.subplots(figsize=(10, 10))
@@ -136,20 +139,10 @@ with tab2:
     )
 
     ax.set_yticklabels(labels=['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'], rotation=0, fontsize=8)
-    ax.set_xticklabels(labels=list(df_intensity_id.index), rotation=0, fontsize=8)
+    #ax.set_xticklabels(labels=list(df_emotion_id.index), rotation=0, fontsize=8)
     ax.set_xlabel('')
     st.pyplot(fig)
     st.markdown("**Legenda**")
     st.markdown("Feelings may be linked to various intensities. Cells without any smile are just neutral, whereas positive pixels may be good :) or very good :)) days, as well as negative ones can be bad :( or very bad :(( days.")
 
-st.sidebar.subheader('References')
-st.sidebar.image("pics/emotion-wheel.png")
-st.sidebar.markdown("""
-    The emotion wheel depicted above serves as my primary reference. Specifically, I'll be focusing on the eight internal emotions (four positives, four negatives) as my main guide, while considering the external ones to aid in distinguishing between different states. To learn more about the methodology behind this wheel, check out the links below.
-    - [The emotion wheels](https://humansystems.co/emotionwheels/)
-    - [The methodology](https://www.youtube.com/watch?v=ehzj0UHIU9w&t=113s)
-    """)
-st.sidebar.subheader('Other inspirations')
-st.sidebar.markdown("""
-    - [Happy Coding Blog](https://happycoding.io/blog/year-in-pixels-2019)
-    """)
+
