@@ -5,11 +5,9 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import yaml
 from streamlit_gsheets import GSheetsConnection
-import streamlit.components.v1 as components
 import sys
 from utils import *
 from itertools import product
-from pywaffle import Waffle
 import plotly.express as px
 import numpy as np
 

@@ -2,7 +2,8 @@ import streamlit as st
 import pandas as pd
 import sys
 from utils import *
-from annotated_text import annotated_text, annotation
+from annotated_text import annotation
+
 
 ## Setting
 st.set_page_config(
