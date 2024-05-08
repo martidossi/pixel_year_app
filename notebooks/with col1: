@@ -8,3 +8,91 @@ with col2:
     st.video("https://www.youtube.com/watch?v=Vv-cFqfM8GQ")
     st.markdown('- Same stats different graphs')
     st.video("https://www.youtube.com/watch?v=It4UA75z_KQ")
+    
+    
+    tab1, tab2 = st.tabs(["Positive emotions", "Negative emotions"])
+    with tab1:
+        fig = px.bar(
+            df_n_days_pos.sort_values(by='value', ascending=False),
+            x="value",
+            y="emotion",
+            color="emotion",
+            color_discrete_map=dict_emotion_color,
+            orientation='h',
+            height=250,
+            template='simple_white',
+            text_auto=True,
+        )
+        fig.update_layout(
+            font=dict(
+                family="Roboto",
+                size=12
+            ),
+            xaxis_title='number of days',
+            yaxis_title='',
+            xaxis=dict(showgrid=True, tickcolor='black'),
+            yaxis=dict(showgrid=True, tickmode='array', tickvals=[0,1,2,3],ticktext=['Playful', 'Loved', '   Confident', 'Happy']),
+            showlegend=False,
+            xaxis_range=[0, df_n_days['value'].max()],
+            hovermode=False,
+            margin=dict(t=5, l=10),
+            autosize=False,
+            barcornerradius="100%"
+        )
+        fig.update_traces(width=0.6)
+        st.plotly_chart(fig, use_container_width=True, config=config_modebar)
+    with tab2:
+        fig = px.bar(
+            df_n_days_neg.sort_values(by='value', ascending=False),
+            x="value",
+            y="emotion",
+            color="emotion",
+            color_discrete_map=dict_emotion_color,
+            orientation='h',
+            height=250,
+            template='simple_white',
+            text_auto=True
+        )
+        fig.update_layout(
+            font=dict(
+                family="Roboto",
+                size=12
+            ),
+            xaxis_title='number of days',
+            yaxis_title='',
+            xaxis=dict(showgrid=True, tickcolor='black'),
+            yaxis=dict(showgrid=True),
+            showlegend=False,
+            xaxis_range=[0, df_n_days['value'].max()],
+            hovermode=False,
+            margin=dict(t=5),
+            autosize=False,
+            barcornerradius="100%"
+        )
+        fig.update_traces(width=0.6)
+        st.plotly_chart(fig, use_container_width=True, config=config_modebar)
+        
+        
+        
+        
+df_waffle = df_n_days.sort_values(by=['emotion_type', 'perc_value'], ascending=[False, False])
+waffle_dict = df_waffle.set_index('emotion')[['perc_value']].to_dict()['perc_value']
+col1, col2 = st.columns([3,1])
+with col1:
+    fig = plt.figure(
+            FigureClass=Waffle,
+            rows=10,
+            columns=10,
+            values=waffle_dict,
+            icon_size='xx-large',
+            #figsize=(4, 4),
+            colors=list(dict_emotion_color.values())[2:],
+            icon_style='solid',
+            icon_legend=True,
+            characters='⬤',
+            #icons=['sun', 'sun', 'sun', 'sun', 'cloud-showers-heavy', 'cloud-showers-heavy', 'cloud-showers-heavy',
+            #       'cloud-showers-heavy'],
+            block_arranging_style='snake',
+        )
+    fig.axes[0].get_legend().remove()
+    st.pyplot(fig)
