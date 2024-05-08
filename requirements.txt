@@ -6,3 +6,6 @@ seaborn==0.13.0
 git+https://github.com/streamlit/gsheets-connection
 st_gsheets_connection
 PyYAML
+st-annotated-text
+plotly==5.22.0
+yaml==6.0.1
