@@ -8,4 +8,3 @@ st_gsheets_connection
 PyYAML
 st-annotated-text
 plotly==5.22.0
-yaml
