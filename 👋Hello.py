@@ -63,11 +63,9 @@ st.sidebar.image("pics/smalldata_bigdata_output.png", width=250)
 st.sidebar.write("[Dear Data](https://www.dear-data.com/theproject), Giorgia Lupi and Stefanie Posavec.")
 st.sidebar.write("[Feltron personal annual reports](http://feltron.com/), Nicholas Felton.")
 
-st.title("Hello!")
-
-st.header("My name is Martina.")
-text_1 = "Here is where I planned to visualize "
-text_2 = " I am collecting through 2024."
+st.title("Hello,")
+text_1 = "and welcome to my 2024 "
+text_2 = " collection!"
 st.markdown("### " + text_1 + str(annotation("personal data", "", "#fea"))
             + text_2, unsafe_allow_html=True)
 # st.markdown("<h3>" + text + str(annotation("apple", "", "#fea")) + "</h3>", unsafe_allow_html=True)
@@ -75,24 +73,22 @@ st.markdown("### " + text_1 + str(annotation("personal data", "", "#fea"))
 st.write("---")
 st.markdown(
     f"""
-    → This year I am finally succeeding in collecting various personal data from everyday life (emotions, where I am, the movies I see,
-    and some others) –after a few failed attempts. Since last year, I've realized that in order to be consistent 
-    in daily data collection, I cannot gather data of too many diverse topics (if the goal is annual). 
-    So to begin with, I am focusing on what I am most interested in: {str(annotation("daily emotions", "", "#faa"))} and
-    what can influence them! 
-    """, unsafe_allow_html=True)
-st.markdown(
-    f"""
     → If data is a filter we use to portray reality and learn more about it, then self-reporting data may serve as a 
-    powerful lens for {str(annotation("self discovery", "", "#faa"))}, to uncover and recognize patterns we might
+    powerful lens for {str(annotation("self-discovery", "", "#faa"))}, to uncover and recognize patterns we might
     not otherwise pay attention to. Taking up the concept of 
     [Data Humanism](https://giorgialupi.com/data-humanism-my-manifesto-for-a-new-data-wold), data moves from being
     something cold and aseptic to being filled with life, being a tool to foster human knowledge and introspection.
     """, unsafe_allow_html=True)
+st.markdown(
+    f"""
+    → In 2024, I embarked on a journey to gather various personal data from my everyday life, including emotions, 
+    locations, movies I watch, and a few more. My focus is on understanding my 
+{str(annotation("daily emotions", "", "#faa"))} and the factors that influence them.
+    """, unsafe_allow_html=True)
 
 st.markdown(
     f"""
-    → The relationships I intend to explore –aka my {str(annotation("research questions", "", "#faa"))}:
+    → Some relationships I intend to explore –aka my {str(annotation("research questions", "", "#faa"))}:
     - How do I feel during the year? Is there a correlation between feelings and months, days, weekends?
     - Are my emotions influenced by where I am, physically? For instance, how does going to the office affect me?
     - Is there a correlation between watching movies and mood?
@@ -102,9 +98,9 @@ st.markdown(
 
 st.markdown(
     f"""
-    → From a technical point of view, I use {str(annotation("Python", "", "#faa"))} to experiment with various
+    → From a technical point of view, I'm using {str(annotation("Python", "", "#faa"))} to experiment with various
     libraries, graphical models, and interactive visualizations, all supported by Streamlit.
     """, unsafe_allow_html=True)
 
-st.subheader("Join me as I decode the year through data!")
+st.subheader("Join me as I decode the year through data!🧶")
 

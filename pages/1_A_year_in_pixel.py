@@ -29,7 +29,10 @@ with open("config.yml", 'r') as f:
 # Sidebar
 st.sidebar.subheader('References')
 st.sidebar.markdown("""
-    The emotion wheel below represents my primary reference. Specifically, I'll be focusing on the eight internal emotions (four positives, four negatives) as my main guide, while considering the external ones to aid in distinguishing between different states. To learn more about the methodology behind this wheel, check out the links below.
+    The emotion wheel represents my primary reference for this project.
+    Specifically, I'll be focusing on the eight internal emotions (four positives, four negatives) as my main guide,
+    while considering the external ones to aid in distinguishing between different states.
+    To learn more about the methodology behind this wheel, check out the links below.
     - [Emotion wheels](https://humansystems.co/emotionwheels/)
     - [The methodology](https://www.youtube.com/watch?v=ehzj0UHIU9w&t=113s)
     """)
@@ -38,13 +41,15 @@ with st.sidebar.expander('See the wheel:'):
 st.sidebar.subheader('Other inspirations')
 st.sidebar.markdown("""
     - [Happy Coding blog](https://happycoding.io/blog/year-in-pixels-2019)
+    - [Celebrating Daily Joys](https://public.tableau.com/app/profile/qingyue.li8346/viz/CelebratingDailyJoysFindingLoveinEverydayLifeIronviz2024_Qingyue/Dashboard1)
     """)
 
 # Title
 st.title("A Year in :rainbow[Pixel]")
-st.markdown("A *Pixel Year* is a visual representation of personal emotions throughout the course of a year. Each day is assigned a specific color that refers to the predominant mood or feeling of that day.")
-
-st.subheader("**2024**")
+st.markdown("""
+    A *Pixel Year* is a visual representation of personal emotions throughout the course of a year.
+    Each day is assigned the color that reflects the mood or feeling that resonates most on that day.
+""")
 
 # Heatmap
 dict_emotion_id = cfg['map_emotion_id']
@@ -175,9 +180,13 @@ df_month_emotion = (
 df_month_emotion['value'] = df_month_emotion.value_y.combine_first(df_month_emotion.value_x)
 df_month_emotion = df_month_emotion.drop(['value_x', 'value_y'], axis=1)
 
-# Bar plot
+# Treemap
 st.write('---')
-st.subheader('Total number of days')
+st.subheader('1. Total number of days')
+st.markdown("""
+    The treemap displays the proportions of each emotion, grouped into positive and negative categories,
+    across all observed days.
+    """)
 df_n_days = df_month_emotion.groupby('emotion').agg({'value': sum}).reindex(emotion_list).reset_index()
 df_n_days_pos = df_n_days[df_n_days.emotion.isin(positive_emotion_list)]
 df_n_days_neg = df_n_days[df_n_days.emotion.isin(negative_emotion_list)]
@@ -204,18 +213,18 @@ fig.update_traces(
     marker_line_color='black'
 )
 fig.data[0].textinfo = 'label+text+percent entry'
-fig.data[0].hovertemplate = '%{label}<br>number of days: %{value}'
+fig.data[0].hovertemplate = 'emotion=%{label}<br>number of days=%{value}'
 st.plotly_chart(fig, config=config_modebar)
 
 # Trend over time
 st.write('---')
-st.subheader('Trend over time')
+st.subheader('2. Trend over time')
 
 col1, col2 = st.columns(2)
 with col1:
     st.markdown("""
-    Month by month, this visualization shows the trend over time of emotions, in terms of number of days.
-    Use the widget on the right to highlight selected emotions.
+    This visualization displays the trend of emotions over time, showing the number of days each emotion is
+    experienced across different months. The widget on the right allows to select and highlight a few emotions.
     """)
 with col2:
     sel_status = st.multiselect("Pick one or more emotions:", emotion_list, [])
@@ -253,7 +262,23 @@ fig.update_yaxes(showline=True, linewidth=1, linecolor='black')
 st.plotly_chart(fig, config=config_modebar)
 
 st.markdown("##### Visualizing totals")
-tab1, tab2 = st.tabs(["Stacked bar chart", "Polar chart"])
+st.markdown("""
+    This visualization captures the emotional composition of each month by summing up all the emotions.
+    The two visual models, designed with identical data and purpose, are for comparison and experimentation *–and
+    because, for different reasons, I liked both* (which one do you think works better?).
+""")
+with st.expander("Some thoughts:"):
+    st.markdown("""
+           - The bar chart is very effective in providing a complete picture of the data,
+           despite the challenge of comparing internal values that do not share a common baseline.
+           - On the other hand, the radial chart is aesthetically more pleasing and interesting
+           ([why do we find circles so beautiful?](https://www.sciencefocus.com/science/why-do-we-find-circles-so-beautiful)).
+           However, upon closer look, you can see how it really distorts reality:
+           the way it's set up, the inner groups don't get enough representation, which makes the whole data
+           look skewed. (more about the importance of the inner circle
+           [here](https://www.data-to-viz.com/caveat/circular_bar_yaxis.html)).
+       """)
+tab1, tab2 = st.tabs(["Stacked bar chart", "Radial stacked bar chart"])
 with tab1:
     fig = px.bar(
         df_month_emotion,
@@ -281,6 +306,10 @@ with tab1:
     fig.update_yaxes(showline=True, linewidth=1, linecolor='black')
     st.plotly_chart(fig, config=config_modebar)
 with tab2:
+    hole_val = st.slider(
+        "How much changing the size of the inner circle affect the proportion of the colored areas?",
+        min_value=0.0, max_value=1.0, value=0.0
+    )
     fig = px.bar_polar(
         df_month_emotion,
         r="value",
@@ -298,6 +327,7 @@ with tab2:
         legend_title_font_color="black",
         polar=dict(
             bgcolor="white",
+            hole=hole_val,
             radialaxis=dict(
                 gridcolor='lightgray',
                 griddash='dot',
@@ -310,10 +340,13 @@ with tab2:
             )
         ),
     )
+    if hole_val > 0.05:
+        fig.update_polars(radialaxis_ticks="")
+        fig.update_polars(radialaxis_showticklabels=False)
     st.plotly_chart(fig, config=config_modebar)
 
-with st.expander("See the data:"):
-    df_expander = (
-        pd.pivot_table(df_month_emotion, index='month', columns='emotion', values='value')[emotion_list]
-    ).reindex(month_list)
-    st.dataframe(df_expander)
+#with st.expander("The data behind:"):
+#    df_expander = (
+#        pd.pivot_table(df_month_emotion, index='month', columns='emotion', values='value')[emotion_list]
+#    ).reindex(month_list)
+#    st.dataframe(df_expander)
