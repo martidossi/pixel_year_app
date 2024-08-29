@@ -63,13 +63,13 @@ st.sidebar.image("pics/smalldata_bigdata_output.png", width=250)
 st.sidebar.write("[Dear Data](https://www.dear-data.com/theproject), Giorgia Lupi and Stefanie Posavec.")
 st.sidebar.write("[Feltron personal annual reports](http://feltron.com/), Nicholas Felton.")
 
-st.title("Hello,")
-text_1 = "and welcome to my 2024 "
-text_2 = " collection!"
+st.title("Hello (:")
+text_1 = "2024 "
+text_2 = " collection"
 st.markdown("### " + text_1 + str(annotation("personal data", "", "#fea"))
             + text_2, unsafe_allow_html=True)
 # st.markdown("<h3>" + text + str(annotation("apple", "", "#fea")) + "</h3>", unsafe_allow_html=True)
-
+# st.write(st.secrets['connections'])
 st.write("---")
 st.markdown(
     f"""
@@ -102,5 +102,5 @@ st.markdown(
     libraries, graphical models, and interactive visualizations, all supported by Streamlit.
     """, unsafe_allow_html=True)
 
-st.subheader("Join me as I decode the year through data!🧶")
+st.subheader("🧶 Join me as I decode the year through data")
 
