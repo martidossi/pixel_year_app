@@ -10,6 +10,7 @@ from utils import *
 from itertools import product
 import plotly.express as px
 import numpy as np
+from pywaffle import Waffle
 
 # Setting
 st.set_page_config(
@@ -130,7 +131,6 @@ with tab1:
         st.markdown("<span class='scared_square'></span> Scared", unsafe_allow_html=True)
         st.markdown("<span class='sad_square'></span> Sad", unsafe_allow_html=True)
     #st.markdown('#')
-    st.markdown('#')
 
 with tab2:
     labels = df_intensity.transpose().replace('0', '').replace('Missing', '').replace(':|', '')
@@ -181,11 +181,11 @@ df_month_emotion['value'] = df_month_emotion.count_y.combine_first(df_month_emot
 df_month_emotion = df_month_emotion.drop(['count_x', 'count_y'], axis=1)
 
 # Treemap
-st.write('---')
-st.subheader('1. Total number of days')
+st.markdown("""<hr style="height:1px; border:none; color:#333; background-color:#333;"/>""", unsafe_allow_html=True)
+st.subheader('1. Relative number of days (%)')
 st.markdown("""
-    The treemap displays the proportions of each emotion, grouped into positive and negative categories,
-    across all observed days.
+    These visualizations show the overall proportion of each emotion across all observed days, 
+    grouped into positive and negative categories.
     """)
 df_n_days = df_month_emotion.groupby('emotion').agg({'value': sum}).reindex(emotion_list).reset_index()
 df_n_days_pos = df_n_days[df_n_days.emotion.isin(positive_emotion_list)]
@@ -196,35 +196,66 @@ df_n_days['emotion_type'] = list(np.repeat('positive emotion', 4)) + list(np.rep
 
 dict_emotion_color_extended = dict_emotion_color
 dict_emotion_color_extended.update({'(?)': 'white'})
-fig = px.treemap(
-    df_n_days,
-    path=[px.Constant("all"), 'emotion_type', 'emotion'],
-    values='value',
-    color='emotion',
-    color_discrete_map=dict_emotion_color_extended,
-)
-fig.update_layout(
-    height=380,
-    margin=dict(t=20, b=0, r=50),
-)
-fig.update_traces(
-    marker=dict(cornerradius=2),
-    marker_line_width=1,
-    marker_line_color='black'
-)
-fig.data[0].textinfo = 'label+text+percent entry'
-fig.data[0].hovertemplate = 'emotion=%{label}<br>number of days=%{value}'
-st.plotly_chart(fig, config=config_modebar)
+
+tab1, tab2 = st.tabs(["Waffle chart", "Treemap"])
+with tab1:
+    df_n_days['perc_value'] = round(100*df_n_days['value']/df_n_days['value'].sum()).astype(int)
+    df_n_days['emotion_type'] = list(np.repeat('positive emotion', 4)) + list(np.repeat('negative emotion', 4))
+    df_waffle = df_n_days.sort_values(by=['emotion_type', 'perc_value'], ascending=[False, False])
+    waffle_dict = df_waffle.set_index('emotion')[['perc_value']].to_dict()['perc_value']
+    waffle_dict_new = {}
+    for el in waffle_dict:
+        waffle_dict_new[el] = dict_emotion_color[el]
+    fig = plt.figure(
+        FigureClass=Waffle,
+        rows=10,
+        columns=10,
+        values=waffle_dict,
+        colors=[str(el) for el in waffle_dict_new.values()],
+        icon_style='solid',
+        icon_legend=True,
+        icons=['sun', 'sun', 'sun', 'sun', 'cloud-showers-heavy', 'cloud-showers-heavy', 'cloud-showers-heavy', 'cloud-showers-heavy'],
+        block_arranging_style='snake',
+        legend={
+            'labels': [f"{k} ({v}%)" for k, v in waffle_dict.items()],
+            'loc': 'upper left',
+            'bbox_to_anchor': (1, 1),
+            'framealpha': 0,
+            'fontsize': 9,
+        },
+    )
+    st.pyplot(fig)
+with tab2:
+    fig = px.treemap(
+        df_n_days,
+        path=[px.Constant("all"), 'emotion_type', 'emotion'],
+        values='value',
+        color='emotion',
+        color_discrete_map=dict_emotion_color_extended,
+    )
+    fig.update_layout(
+        height=380,
+        margin=dict(t=20, b=0, r=50),
+    )
+    fig.update_traces(
+        marker=dict(cornerradius=2),
+        marker_line_width=1,
+        marker_line_color='black'
+    )
+    fig.data[0].textinfo = 'label+text+percent entry'
+    fig.data[0].textinfo = 'label+text+percent entry'
+    fig.data[0].hovertemplate = 'emotion=%{label}<br>number of days=%{value}'
+    st.plotly_chart(fig, config=config_modebar)
 
 # Trend over time
-st.write('---')
+st.markdown("""<hr style="height:1px; border:none; color:#333; background-color:#333;"/>""", unsafe_allow_html=True)
 st.subheader('2. Trend over time')
 
 col1, col2 = st.columns(2)
 with col1:
     st.markdown("""
-    This visualization displays the trend of emotions over time, showing the number of days each emotion is
-    experienced across different months. The widget on the right allows to select and highlight a few emotions.
+    This visualization shows how emotions change over time, displaying the number of days each emotion is felt in different months.
+    The widget on the right lets you select and highlight specific emotions.
     """)
 with col2:
     sel_status = st.multiselect("Pick one or more emotions:", emotion_list, [])
@@ -246,7 +277,7 @@ if len(sel_status) >= 1:
             d['line']['color'] = 'lightgrey'
 fig.update_layout(
     font=dict(
-        family="Roboto",
+        family="IBM Plex Sans",
         size=12
     ),
     legend_title_font_color="black",
@@ -278,6 +309,7 @@ with st.expander("Some thoughts:"):
            look skewed. (more about the importance of the inner circle
            [here](https://www.data-to-viz.com/caveat/circular_bar_yaxis.html)).
        """)
+
 tab1, tab2 = st.tabs(["Stacked bar chart", "Radial stacked bar chart"])
 with tab1:
     fig = px.bar(
@@ -290,7 +322,7 @@ with tab1:
     )
     fig.update_layout(
         font=dict(
-            family="Roboto",
+            family="IBM Plex Sans",
             size=12,
         ),
         legend_title_font_color="black",
@@ -319,7 +351,7 @@ with tab2:
     )
     fig.update_layout(
         font=dict(
-            family="Roboto",
+            family="IBM Plex Sans",
             size=12,
         ),
         margin=dict(t=20),
@@ -350,3 +382,5 @@ with tab2:
 #        pd.pivot_table(df_month_emotion, index='month', columns='emotion', values='value')[emotion_list]
 #    ).reindex(month_list)
 #    st.dataframe(df_expander)
+
+
