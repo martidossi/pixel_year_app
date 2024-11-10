@@ -1,5 +1,3 @@
-import streamlit as st
-import pandas as pd
 import sys
 from utils import *
 from annotated_text import annotation
@@ -11,7 +9,21 @@ st.set_page_config(
     page_icon="🟧"
 )
 #st.image("pics/cover.png")
+CURRENT_THEME = "blue"
+IS_DARK_THEME = True
+EXPANDER_TEXT = """
+    This is a custom theme. You can enable it by copying the following code
+    to `.streamlit/config.toml`:
 
+    ```python
+    [theme]
+    primaryColor = "#E694FF"
+    backgroundColor = "#00172B"
+    secondaryBackgroundColor = "#0083B8"
+    textColor = "#C6CDD4"
+    font = "sans-serif"
+    ```
+    """
 sys.path.insert(0, "..")
 local_css("style.css")
 
@@ -63,37 +75,48 @@ st.sidebar.image("pics/smalldata_bigdata_output.png", width=250)
 st.sidebar.write("[Dear Data](https://www.dear-data.com/theproject), Giorgia Lupi and Stefanie Posavec.")
 st.sidebar.write("[Feltron personal annual reports](http://feltron.com/), Nicholas Felton.")
 
-st.title("Hello (:")
-text_1 = "2024 "
+st.title("Hello 🌞")
+text_1 = "Welcome to my 2024 "
 text_2 = " collection"
-st.markdown("### " + text_1 + str(annotation("personal data", "", "#fea"))
+st.markdown("### " + text_1 + str(annotation(" personal data", "", "#fea"))
             + text_2, unsafe_allow_html=True)
 # st.markdown("<h3>" + text + str(annotation("apple", "", "#fea")) + "</h3>", unsafe_allow_html=True)
 # st.write(st.secrets['connections'])
 st.write("---")
 st.markdown(
     f"""
-    → If data is a filter we use to portray reality and learn more about it, then self-reporting data may serve as a 
-    powerful lens for {str(annotation("self-discovery", "", "#faa"))}, to uncover and recognize patterns we might
-    not otherwise pay attention to. Taking up the concept of 
-    [Data Humanism](https://giorgialupi.com/data-humanism-my-manifesto-for-a-new-data-wold), data moves from being
-    something cold and aseptic to being filled with life, being a tool to foster human knowledge and introspection.
-    """, unsafe_allow_html=True)
-st.markdown(
-    f"""
-    → In 2024, I embarked on a journey to gather various personal data from my everyday life, including emotions, 
-    locations, movies I watch, and a few more. My focus is on understanding my 
-{str(annotation("daily emotions", "", "#faa"))} and the factors that influence them.
+    🔍 Data is a lens through which we shape and interpret reality,
+    bringing clarity to complex phenomena.
+    
+    Self-reported data shares the same goal, yet shifts the focus,
+    from the external world to our inner reality,
+    revealing a narrative of who we are and the story we carry within.
+    
+    In this context, data visualization becomes a powerful tool for self-discovery,
+    helping us see patterns that might otherwise remain hidden.
+    
+    Inspired by the concept of [Data Humanism](https://giorgialupi.com/data-humanism-my-manifesto-for-a-new-data-wold),
+    this project explores the potential of small, subjective data.
+    Over the past year, on a daily basis, I have been collecting data on a few key indicators,
+    without a predefined goal, just out of curiosity, to experiment and see where it might lead.
+    
+    The daily practice of tracking data has been a valuable discovery itself:
+    I practiced consistency, learned that this consistency works best
+    when I track only a few indicators, resisted the urge to introduce changes
+    to keep the collection simple and coherent, cursed myself when I forgot one or more days,
+    and felt the satisfaction of steady progress. With each small step, I discovered the true
+    impact of the journey, which is only
+    visible in hindsight.
     """, unsafe_allow_html=True)
 
 st.markdown(
     f"""
-    → Some relationships I intend to explore –aka my {str(annotation("research questions", "", "#faa"))}:
-    - How do I feel during the year? Is there a correlation between feelings and months, days, weekends?
-    - Are my emotions influenced by where I am, physically? For instance, how does going to the office affect me?
-    - Is there a correlation between watching movies and mood?
+    Some relationships I aim to explore—my personal research questions—include:
+    - How do I feel throughout the year? Is there a correlation between my emotions and months, days, or weekends?
+    - Are my emotions influenced by my physical location? For example, how does going to the office affect my mood?
+    - Is there a connection between watching movies and my emotional state?
     - How do I feel on days when I have a headache?
-    - What about cross influences? For example, days of the year and movies, cities and movies?
+    - What about cross-influences? For instance, do specific days of the year correlate with movies, or do cities and movies affect each other?
     """, unsafe_allow_html=True)
 
 st.markdown(
