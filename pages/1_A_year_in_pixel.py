@@ -167,8 +167,9 @@ df_melt = df_melt[(df_melt['value']!='0') & (df_melt['value']!='Missing')]
 df_melt.columns = ['month', 'emotion']
 df_melt['day'] = df_melt.groupby(['month']).cumcount()+1
 df_count = df_melt[['month', 'emotion']].value_counts().reset_index()
+df_count.columns = ['month', 'emotion', 'value']
 df_month_emotion_base = pd.DataFrame(data=product(month_list, emotion_list), columns=['month', 'emotion'])
-df_month_emotion_base['count'] = 0
+df_month_emotion_base['value'] = 0
 df_month_emotion = (
     pd.merge(
         df_month_emotion_base,
@@ -177,8 +178,8 @@ df_month_emotion = (
         left_on=['month', 'emotion'],
         right_on = ['month', 'emotion'])
 ).fillna(0)
-df_month_emotion['value'] = df_month_emotion.count_y.combine_first(df_month_emotion.count_x)
-df_month_emotion = df_month_emotion.drop(['count_x', 'count_y'], axis=1)
+df_month_emotion['value'] = df_month_emotion.value_y.combine_first(df_month_emotion.value_x)
+df_month_emotion = df_month_emotion.drop(['value_x', 'value_y'], axis=1)
 
 # Treemap
 st.markdown("""<hr style="height:1px; border:none; color:#333; background-color:#333;"/>""", unsafe_allow_html=True)
