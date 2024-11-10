@@ -29,7 +29,7 @@ with open("config.yml", 'r') as f:
 # Sidebar
 st.sidebar.subheader('References')
 st.sidebar.markdown("""
-    The emotion wheel represents my primary reference for this project.
+    The emotion wheel represents my primary reference for the project.
     Specifically, I'll be focusing on the eight internal emotions (four positives, four negatives) as my main guide,
     while considering the external ones to aid in distinguishing between different states.
     To learn more about the methodology behind this wheel, check out the links below.
@@ -111,7 +111,6 @@ with tab1:
         xticklabels=1,
         ax=ax
     )
-
     ax.set_yticklabels(labels=['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'], rotation=0, fontsize=8)
     ax.set_xticklabels(labels=list(df_emotion_id.index), rotation=0, fontsize=8)
     ax.set_xlabel('')
@@ -130,6 +129,7 @@ with tab1:
     with col4:
         st.markdown("<span class='scared_square'></span> Scared", unsafe_allow_html=True)
         st.markdown("<span class='sad_square'></span> Sad", unsafe_allow_html=True)
+    #st.markdown('#')
     st.markdown('#')
 
 with tab2:
@@ -161,14 +161,14 @@ with tab2:
     as well as negative ones can be bad :( or very bad :(( days.
     """)
 
-# Df month emotion
+# Df monthly emotion
 df_melt = df_emotion.melt()
 df_melt = df_melt[(df_melt['value']!='0') & (df_melt['value']!='Missing')]
 df_melt.columns = ['month', 'emotion']
 df_melt['day'] = df_melt.groupby(['month']).cumcount()+1
-df_count = df_melt[['month', 'emotion']].value_counts().reset_index().rename(columns={0: 'value'})
+df_count = df_melt[['month', 'emotion']].value_counts().reset_index()
 df_month_emotion_base = pd.DataFrame(data=product(month_list, emotion_list), columns=['month', 'emotion'])
-df_month_emotion_base['value'] = 0
+df_month_emotion_base['count'] = 0
 df_month_emotion = (
     pd.merge(
         df_month_emotion_base,
@@ -177,8 +177,8 @@ df_month_emotion = (
         left_on=['month', 'emotion'],
         right_on = ['month', 'emotion'])
 ).fillna(0)
-df_month_emotion['value'] = df_month_emotion.value_y.combine_first(df_month_emotion.value_x)
-df_month_emotion = df_month_emotion.drop(['value_x', 'value_y'], axis=1)
+df_month_emotion['value'] = df_month_emotion.count_y.combine_first(df_month_emotion.count_x)
+df_month_emotion = df_month_emotion.drop(['count_x', 'count_y'], axis=1)
 
 # Treemap
 st.write('---')
