@@ -9,3 +9,4 @@ PyYAML
 st-annotated-text
 plotly==5.22.0
 pyyaml==6.0.1
+pywaffle
