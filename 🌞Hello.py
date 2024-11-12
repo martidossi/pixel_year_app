@@ -383,39 +383,39 @@ with col1:
     The widget on the right lets you select and highlight specific emotions.
     """)
     #sel_status = st.multiselect("Pick one or more emotions:", emotion_list, [])
-sel_status = []
-fig = px.line(
-    df_month_emotion,
-    x="month",
-    y="value",
-    color="emotion",
-    color_discrete_map=dict_emotion_color,
-    template="simple_white"
-)
-if len(sel_status) >= 1:
-    for d in fig['data']:
-        if d['name'] in sel_status:
-            d['line']['color'] = dict_emotion_color[d['name']]
-            d['line']['width'] = 3
-        if d['name'] not in sel_status:
-            d['line']['color'] = 'lightgrey'
-fig.update_layout(
-    font=dict(
-        family="IBM Plex Sans",
-        size=12
-    ),
-    plot_bgcolor="rgba(0, 0, 0, 0)",
-    paper_bgcolor="rgba(0, 0, 0, 0)",
-    legend_title_font_color="black",
-    height=380,
-    xaxis_title="",
-    yaxis_title="number of days",
-    xaxis=dict(showgrid=False, tickcolor='black', color='black', linewidth=1, gridwidth=1, gridcolor='darkgray'),
-    yaxis=dict(showgrid=False, tickcolor='black', color='black', linewidth=1, gridwidth=1, gridcolor='black'),
-    margin=dict(t=20),
-    showlegend=False
-)
-st.plotly_chart(fig, config=config_modebar)
+    sel_status = []
+    fig = px.line(
+        df_month_emotion,
+        x="month",
+        y="value",
+        color="emotion",
+        color_discrete_map=dict_emotion_color,
+        template="simple_white"
+    )
+    if len(sel_status) >= 1:
+        for d in fig['data']:
+            if d['name'] in sel_status:
+                d['line']['color'] = dict_emotion_color[d['name']]
+                d['line']['width'] = 3
+            if d['name'] not in sel_status:
+                d['line']['color'] = 'lightgrey'
+    fig.update_layout(
+        font=dict(
+            family="IBM Plex Sans",
+            size=12
+        ),
+        plot_bgcolor="rgba(0, 0, 0, 0)",
+        paper_bgcolor="rgba(0, 0, 0, 0)",
+        legend_title_font_color="black",
+        height=380,
+        xaxis_title="",
+        yaxis_title="number of days",
+        xaxis=dict(showgrid=False, tickcolor='black', color='black', linewidth=1, gridwidth=1, gridcolor='darkgray'),
+        yaxis=dict(showgrid=False, tickcolor='black', color='black', linewidth=1, gridwidth=1, gridcolor='black'),
+        margin=dict(t=20),
+        showlegend=False
+    )
+    st.plotly_chart(fig, config=config_modebar)
 
 st.markdown("##### Visualizing totals")
 col1, _ = st.columns([3, 1])
