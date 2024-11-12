@@ -1,4 +1,4 @@
-# Try it Now!
+# Try it now!
 Visit [pixelyearapp.streamlit.app](https://pixelyearapp.streamlit.app/) to use the app directly in your browser - no installation required!
 
 ---
