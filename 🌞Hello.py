@@ -157,7 +157,8 @@ with col1:
     st.markdown("""
         The [emotion wheel](https://humansystems.co/emotionwheels/) on the right represents the main guide for the project.
         I used its eight core emotions (four positive, four negative) to classify each day, with the outer emotions helping 
-        to capture different shades of feeling. Here are a few more links that sparked ideas along the way.
+        to capture different shades of feeling. The color palette is also based on the emotion wheel (see sidebar for reference).
+        Here are a few more links that sparked ideas along the way.
         - [Happy Coding blog](https://happycoding.io/blog/year-in-pixels-2019)
         - [Celebrating Daily Joys](https://public.tableau.com/app/profile/qingyue.li8346/viz/CelebratingDailyJoysFindingLoveinEverydayLifeIronviz2024_Qingyue/Dashboard1)
         """)
@@ -266,7 +267,7 @@ with col1:
         for item in [fig, ax]:
             item.patch.set_visible(False)
         st.pyplot(fig, dpi=1000)
-        st.markdown("**Legenda**")
+        st.markdown("**Legend**")
         st.markdown("""
         Feelings may be linked to various intensities. 
         Cells without any smile are just neutral, whereas positive pixels may be good :) or very good :)) days,
@@ -375,14 +376,14 @@ with tab2:
 st.markdown("""<hr style="height:1px; border:none; color:#333; background-color:#333;"/>""", unsafe_allow_html=True)
 st.subheader('2. Trend over time')
 
-col1, col2 = st.columns(2)
+col1, _ = st.columns([3, 1])
 with col1:
     st.markdown("""
     This visualization shows how emotions change over time, displaying the number of days each emotion is felt in different months.
     The widget on the right lets you select and highlight specific emotions.
     """)
-with col2:
-    sel_status = st.multiselect("Pick one or more emotions:", emotion_list, [])
+    #sel_status = st.multiselect("Pick one or more emotions:", emotion_list, [])
+sel_status = []
 fig = px.line(
     df_month_emotion,
     x="month",
@@ -403,100 +404,113 @@ fig.update_layout(
         family="IBM Plex Sans",
         size=12
     ),
+    plot_bgcolor="rgba(0, 0, 0, 0)",
+    paper_bgcolor="rgba(0, 0, 0, 0)",
     legend_title_font_color="black",
     height=380,
     xaxis_title="",
     yaxis_title="number of days",
-    xaxis=dict(showgrid=True, tickcolor='black', color='black'),
-    yaxis=dict(showgrid=True, tickcolor='black', color='black'),
+    xaxis=dict(showgrid=False, tickcolor='black', color='black', linewidth=1, gridwidth=1, gridcolor='darkgray'),
+    yaxis=dict(showgrid=False, tickcolor='black', color='black', linewidth=1, gridwidth=1, gridcolor='black'),
     margin=dict(t=20),
+    showlegend=False
 )
-fig.update_xaxes(showline=True, linewidth=1, linecolor='black')
-fig.update_yaxes(showline=True, linewidth=1, linecolor='black')
 st.plotly_chart(fig, config=config_modebar)
 
 st.markdown("##### Visualizing totals")
-st.markdown("""
-    This visualization captures the emotional composition of each month by summing up all the emotions.
-    The two visual models, designed with identical data and purpose, are for comparison and experimentation *–and
-    because, for different reasons, I liked both* (which one do you think works better?).
-""")
-with st.expander("Some thoughts:"):
+col1, _ = st.columns([3, 1])
+with col1:
     st.markdown("""
-           - The bar chart is very effective in providing a complete picture of the data,
-           despite the challenge of comparing internal values that do not share a common baseline.
-           - On the other hand, the radial chart is aesthetically more pleasing and interesting
-           ([why do we find circles so beautiful?](https://www.sciencefocus.com/science/why-do-we-find-circles-so-beautiful)).
-           However, upon closer look, you can see how it really distorts reality:
-           the way it's set up, the inner groups don't get enough representation, which makes the whole data
-           look skewed. (more about the importance of the inner circle
-           [here](https://www.data-to-viz.com/caveat/circular_bar_yaxis.html)).
-       """)
+        This visualization captures the emotional composition of each month by summing up all the emotions.
+        The two visual models, designed with identical data and purpose, are for comparison and experimentation.
+        For different reasons, I like both of them, although they work quite differently
+        (which one do you think works better?).
+    """)
 
-tab1, tab2 = st.tabs(["Stacked bar chart", "Radial stacked bar chart"])
-with tab1:
-    fig = px.bar(
-        df_month_emotion,
-        x="month",
-        y="value",
-        color="emotion",
-        color_discrete_map=dict_emotion_color,
-        template="simple_white",
-    )
-    fig.update_layout(
-        font=dict(
-            family="IBM Plex Sans",
-            size=12,
-        ),
+col1, _ = st.columns([3, 1])
+with col1:
+    tab1, tab2 = st.tabs(["Stacked bar chart", "Radial stacked bar chart"])
+    with tab1:
+        fig = px.bar(
+            df_month_emotion,
+            x="month",
+            y="value",
+            color="emotion",
+            color_discrete_map=dict_emotion_color,
+            template="simple_white",
+        )
+        fig.update_layout(
+            font=dict(
+                family="IBM Plex Sans",
+                size=12,
+            ),
+            plot_bgcolor="rgba(0, 0, 0, 0)",
+            paper_bgcolor="rgba(0, 0, 0, 0)",
+            legend_title_font_color="black",
+            height=380,
+            xaxis_title="",
+            yaxis_title="number of days",
+            xaxis=dict(showline=True, linewidth=1, linecolor='black', showgrid=False),
+            yaxis=dict(showline=True, linewidth=1, linecolor='black', showgrid=False),
+            margin=dict(t=20),
+            bargap=0,
+            showlegend=False
+        )
+        st.plotly_chart(fig, config=config_modebar)
+    with tab2:
+        hole_val = st.slider(
+            "How much changing the size of the inner circle affect the proportion of the colored areas?",
+            min_value=0.0, max_value=1.0, value=0.0
+        )
+        fig = px.bar_polar(
+            df_month_emotion,
+            r="value",
+            theta="month",
+            color="emotion",
+            color_discrete_map=dict_emotion_color
+        )
+        fig.update_layout(
+            font=dict(
+                family="IBM Plex Sans",
+                size=12,
+            ),
+            plot_bgcolor="rgba(0, 0, 0, 0)",
+            paper_bgcolor="rgba(0, 0, 0, 0)",
+            showlegend=False,
+            margin=dict(t=20),
+            height=380,
+            legend_title_font_color="black",
+            polar=dict(
+                bgcolor="white",
+                hole=hole_val,
+                radialaxis=dict(
+                    gridcolor='lightgray',
+                    griddash='dot',
+                    tickcolor='black',
+                    tickfont_color='black'
+                    ),
+                angularaxis=dict(
+                    linecolor='black',
+                    gridcolor='gray',
+                )
+            ),
+        )
+        if hole_val > 0.05:
+            fig.update_polars(radialaxis_ticks="")
+            fig.update_polars(radialaxis_showticklabels=False)
+        st.plotly_chart(fig, config=config_modebar)
 
-        legend_title_font_color="black",
-        height=380,
-        xaxis_title="",
-        yaxis_title="number of days",
-        xaxis=dict(showgrid=True, tickcolor='black', color='black'),
-        yaxis=dict(showgrid=True, tickcolor='black', color='black'),
-        margin=dict(t=20),
-        bargap=0
-    )
-    fig.update_xaxes(showline=True, linewidth=1, linecolor='black')
-    fig.update_yaxes(showline=True, linewidth=1, linecolor='black')
-    st.plotly_chart(fig, config=config_modebar)
-with tab2:
-    hole_val = st.slider(
-        "How much changing the size of the inner circle affect the proportion of the colored areas?",
-        min_value=0.0, max_value=1.0, value=0.0
-    )
-    fig = px.bar_polar(
-        df_month_emotion,
-        r="value",
-        theta="month",
-        color="emotion",
-        color_discrete_map=dict_emotion_color
-    )
-    fig.update_layout(
-        font=dict(
-            family="IBM Plex Sans",
-            size=12,
-        ),
-        margin=dict(t=20),
-        height=380,
-        legend_title_font_color="black",
-        polar=dict(
-            bgcolor="white",
-            hole=hole_val,
-            radialaxis=dict(
-                gridcolor='lightgray',
-                griddash='dot',
-                tickcolor='black',
-                tickfont_color='black'
-                ),
-            angularaxis=dict(
-                linecolor='black',
-                gridcolor='gray',
-            )
-        ),
-    )
-    if hole_val > 0.05:
-        fig.update_polars(radialaxis_ticks="")
-        fig.update_polars(radialaxis_showticklabels=False)
-    st.plotly_chart(fig, config=config_modebar)
+    col1, col2 = st.columns(2)
+    with col1:
+        st.markdown("""
+            - The bar chart is very effective in providing a complete picture of the data,
+            despite the challenge of comparing internal values that do not share a common baseline.
+               """)
+    with col2:
+        st.markdown("""
+            - The radial chart is aesthetically more pleasing and interesting
+            ([why do we find circles so beautiful?](https://www.sciencefocus.com/science/why-do-we-find-circles-so-beautiful)).
+            This said, it distorts reality: by construction, the inner groups are never well represented, which makes
+            the whole data look skewed (more about this
+            [here](https://www.data-to-viz.com/caveat/circular_bar_yaxis.html)).
+           """)
