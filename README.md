@@ -1,5 +1,5 @@
 # Try it Now!
-Visit [www.pixelyearapp.streamlit.app](https://pixelyearapp.streamlit.app/) to use the app directly in your browser - no installation required!
+Visit [pixelyearapp.streamlit.app](https://pixelyearapp.streamlit.app/) to use the app directly in your browser - no installation required!
 
 ---
 🔍 Data is a lens through which we shape and interpret reality, bringing clarity to complex phenomena.
