@@ -116,7 +116,7 @@ with tab1:
     ax.set_xticklabels(labels=list(df_emotion_id.index), rotation=0, fontsize=8)
     ax.set_xlabel('')
     st.pyplot(fig)
-    st.markdown("**Legenda**")
+    st.markdown("**Legend**")
     col1, col2, col3, col4 = st.columns([1, 1, 1, 1])
     with col1:
         st.markdown("<span class='happy_square'></span> Happy", unsafe_allow_html=True)
@@ -154,7 +154,7 @@ with tab2:
     ax.set_xticklabels(labels=list(df_emotion_id.index), rotation=0, fontsize=8)
     ax.set_xlabel('')
     st.pyplot(fig)
-    st.markdown("**Legenda**")
+    st.markdown("**Legend**")
     st.markdown("""
     Feelings may be linked to various intensities. 
     Cells without any smile are just neutral, whereas positive pixels may be good :) or very good :)) days,

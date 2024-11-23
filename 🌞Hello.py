@@ -19,7 +19,6 @@ st.set_page_config(
     page_icon="🟧",
     layout="wide"
 )
-
 # st.image("pics/cover.png")
 def set_bg_hack(main_bg):
     '''
@@ -44,13 +43,14 @@ def set_bg_hack(main_bg):
         unsafe_allow_html=True
     )
 
-set_bg_hack('pics/cover_v.png')
+#set_bg_hack('pics/cover_v.png')
 
 sys.path.insert(0, "..")
 local_css("style.css")
 
 st.sidebar.subheader('(A Year in Pixel) legend')
-st.sidebar.markdown("Colors used are based on the emotion wheel, except where otherwise specified.")
+st.sidebar.markdown("The colors below are those used in the *pixel-year-related* visualizations and are based on the "
+                    "**emotion wheel** developed by [Human Systems](https://humansystems.co/emotionwheels/).")
 st.sidebar.markdown("""
     <span class='happy_square'></span> Happy <br>
     <span class='loved_square'></span> Loved <br>
@@ -62,13 +62,16 @@ st.sidebar.markdown("""
     <span class='sad_square'></span> Sad <br>
     """, unsafe_allow_html=True
 )
+
+with st.sidebar.expander("See the emotion wheel:"):
+    st.image("pics/emotion-wheel.png")# width=300)
 st.sidebar.markdown("""<hr style="height:2px; border:none; color:#333; background-color:#333;"/>""", unsafe_allow_html=True)
 
 st.sidebar.subheader('🌸 About me')
 # st.sidebar.image("pics/profile_pic.png", width=250)
 st.sidebar.markdown("""
-    I'm a data scientist with a statistical background, based in Italy,
-    and particularly passionate about data visualization. 
+    My name is Martina and I am currently based in Italy, where I work as data scientist.
+    I'm a statistician by background and, over the past years, I developed a strong interest in information design and data visualization. 
     To know more about me, check out my [personal page](https://martina-dossi.notion.site/Hi-I-m-Martina-6c1e9636b59245cd8cfedc1fffd05a1b).
     """)
 st.sidebar.subheader('💌 Contacts')
@@ -90,12 +93,14 @@ st.sidebar.image("pics/smalldata_bigdata_output.png", width=250)
 st.sidebar.markdown("""
     - [Dear Data](https://www.dear-data.com/theproject), Giorgia Lupi and Stefanie Posavec.
     - [Feltron personal annual reports](http://feltron.com/), Nicholas Felton.
+    - [Happy Coding blog](https://happycoding.io/blog/year-in-pixels-2019), Happy Coding Blog.
+    - [Celebrating Daily Joys](https://public.tableau.com/app/profile/qingyue.li8346/viz/CelebratingDailyJoysFindingLoveinEverydayLifeIronviz2024_Qingyue/Dashboard1), Qingyue Li.
     """
     )
 st.sidebar.subheader('Made with 🫶 in [Streamlit](https://streamlit.io/)')
 
 
-st.title("🌞 Hello!")
+st.title("🌞 Ciao!")
 text_1 = "Welcome to my 2024 "
 text_2 = " collection"
 st.markdown("### " + text_1 + str(annotation(" personal data", "", "#fea"))
@@ -107,33 +112,31 @@ st.markdown("""<hr style="height:1px; border:none; color:#333; background-color:
 
 #import streamlit.components.v1 as components
 #components.html("""<hr style="height:2px;border:none;color:#333;background-color:#333;" /> """)
-col1, col2 = st.columns(2)
+col1, col2 = st.columns(2, gap='large')
 
 with col1:
     st.markdown(
         f"""
-        🔍 Data is a lens through which we shape and interpret reality,
-        bringing clarity to complex phenomena.
+        🔍 Data is a lens to bring clarity to the complexities of the world around us,
+        helping us make sense of what might otherwise seem chaotic.
         
-        ✍️ Self-reported data shares the same goal, yet shifts the focus,
-        from the external world to our inner reality,
-        revealing a narrative of who we are and the story we carry within.
+        ✍️ Self-reported data serves the same purpose, yet shifts the focus inward, 
+        accompanying facts with personal narratives that reveal who we are and the stories we carry within.
         
-        🌟 In this context, data visualization becomes a powerful tool for self-discovery,
-        helping us see patterns that might otherwise remain hidden.
+        🌟 In this context, data visualization becomes a tool for self-discovery,
+        helping us see patterns that might otherwise remain hidden. 
         
         🫐 Inspired by the concept of [Data Humanism](https://giorgialupi.com/data-humanism-my-manifesto-for-a-new-data-wold),
         this project explores the potential of small, subjective data.
-        Over the past year, on a daily basis, I have been collecting data on a few key indicators,
-        without a predefined goal, just out of curiosity, to experiment and see where it might lead.
+        Over the past year, I’ve been collecting data about my daily life that I found interesting
+        —partly to understand myself better, reflect on the past year once the collection is complete,
+        and also to experiment with a new project and see where it might lead, without predefined goals.
         
         🧶 The daily practice of tracking data has been a valuable discovery itself:
         I practiced consistency, learned that this consistency works best
-        when I track only a few indicators, resisted the urge to introduce changes
+        when I track only a few features, resisted the urge to introduce changes
         to keep the collection simple and coherent, cursed myself when I forgot one or more days,
-        and felt the satisfaction of steady progress. With each small step, I discovered the true
-        impact of the journey, which is only
-        visible in hindsight.
+        and felt the satisfaction of steady progress. 
         """, unsafe_allow_html=True)
 
 with col2:
@@ -141,32 +144,16 @@ with col2:
         f"""
         🫧 Some relationships I aim to explore—my personal research questions—include:
         - How do I feel throughout the year? Is there a correlation between my emotions and months, days, or weekends?
+        - What is my favourite days? How do I feel during weekends? Which season brings me the most happiness?
         - Are my emotions influenced by my physical location? For example, how does going to the office affect my mood?
         - Is there a connection between watching movies and my emotional state?
-        - How do I feel on days when I have a headache?
         - What about cross-influences? For instance, do specific days of the year correlate with movies, or do cities and movies affect each other?
         """, unsafe_allow_html=True)
 
 st.markdown("""<hr style="height:1px; border:none; color:#333; background-color:#333;"/>""", unsafe_allow_html=True)
 
 # Title
-col1, col2 = st.columns([2, 1])
-with col1:
-    st.markdown("# A Year in :rainbow[Pixel]")
-    st.markdown("""#### A *pixel year* is a visual representation of personal emotions over the course of a year, with each day assigned a color that reflects the dominant mood or feeling for that day.""")
-    st.markdown("""
-        The [emotion wheel](https://humansystems.co/emotionwheels/) on the right represents the main guide for the project.
-        I used its eight core emotions (four positive, four negative) to classify each day, with the outer emotions helping 
-        to capture different shades of feeling. The color palette is also based on the emotion wheel (see sidebar for reference).
-        Here are a few more links that sparked ideas along the way.
-        - [Happy Coding blog](https://happycoding.io/blog/year-in-pixels-2019)
-        - [Celebrating Daily Joys](https://public.tableau.com/app/profile/qingyue.li8346/viz/CelebratingDailyJoysFindingLoveinEverydayLifeIronviz2024_Qingyue/Dashboard1)
-        """)
-with col2:
-    st.markdown("#")
-    st.image("pics/emotion-wheel.png")
-
-
+st.markdown("# A Year in :rainbow[Pixel]")
 conn = st.connection("gsheets", type=GSheetsConnection)
 config_modebar = {'displayModeBar': False}
 
@@ -219,30 +206,43 @@ df_intensity = (
 )
 
 # Visualization
-col1, _ = st.columns([3, 1])
+col1, _ = st.columns([3, 1], gap='large')
 with col1:
-    tab1, tab2 = st.tabs(["Prevailing feeling", "Intensity"])
-    with tab1:
-        fig, ax = plt.subplots(figsize=(10, 10))
-        ax = sns.heatmap(
-            df_emotion_id.transpose(),
-            cmap=list(dict_emotion_color.values()),
-            cbar=False,
-            linewidths=1.2,
-            linecolor='white',
-            square=True,
-            vmin=0,
-            vmax=len(dict_emotion_color),
-            xticklabels=1,
-            ax=ax
-        )
-        ax.set_yticklabels(labels=['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'], rotation=0, fontsize=8)
-        ax.set_xticklabels(labels=list(df_emotion_id.index), rotation=0, fontsize=8)
-        ax.set_xlabel('')
-        for item in [fig, ax]:
-            item.patch.set_visible(False)
-        st.pyplot(fig, dpi=1000)
-        #st.markdown('#')
+    st.markdown(
+        """#### A *pixel year* is a visual representation of personal emotions over the course of a year, where each day is assigned to the color that reflects the dominant mood or feeling of that day."""
+    )
+    st.markdown("""
+        The emotion wheel in the sidebar is the reference I considered for the project.
+        I relied on its eight core emotions (four positive, four negative) to classify each day, with the outer emotions helping 
+        to capture different shades of feeling. 
+        Each day, I tracked both the prevailing feeling and the related intensity (see the two tabs). 
+        Squares without any smile are just neutral, whereas positive pixels may be good `:)` or very good `:))` days,
+        as well as negative ones can be bad `:(` or very bad `:((` days.
+        """)
+    col11, _ = st.columns([3, 1], gap='large')
+    with col11:
+        tab1, tab2 = st.tabs(["Prevailing feeling", "Intensity"])
+        with tab1:
+            fig, ax = plt.subplots(figsize=(10, 10))
+            ax = sns.heatmap(
+                df_emotion_id.transpose(),
+                cmap=list(dict_emotion_color.values()),
+                cbar=False,
+                linewidths=1.4,
+                linecolor='white',
+                square=True,
+                vmin=0,
+                vmax=len(dict_emotion_color),
+                xticklabels=1,
+                ax=ax
+            )
+            ax.set_yticklabels(labels=['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'], rotation=0, fontsize=8)
+            ax.set_xticklabels(labels=list(df_emotion_id.index), rotation=0, fontsize=8)
+            ax.set_xlabel('')
+            for item in [fig, ax]:
+                item.patch.set_visible(False)
+            st.pyplot(fig, dpi=2000, use_container_width=True)
+            #st.markdown('#')
 
     with tab2:
         labels = df_intensity.transpose().replace('0', '').replace('Missing', '').replace(':|', '')
@@ -251,7 +251,7 @@ with col1:
             df_emotion_id.transpose(),
             cmap=list(dict_emotion_color.values()),
             cbar=False,
-            linewidths=1.2,
+            linewidths=1.4,
             linecolor='white',
             square=True,
             vmin=0,
@@ -266,13 +266,8 @@ with col1:
         ax.set_xlabel('')
         for item in [fig, ax]:
             item.patch.set_visible(False)
-        st.pyplot(fig, dpi=1000)
-        st.markdown("**Legend**")
-        st.markdown("""
-        Feelings may be linked to various intensities. 
-        Cells without any smile are just neutral, whereas positive pixels may be good :) or very good :)) days,
-        as well as negative ones can be bad :( or very bad :(( days.
-        """)
+        st.pyplot(fig, dpi=2000, use_container_width=True)
+
 
 ##########################
 
@@ -298,9 +293,9 @@ df_month_emotion = df_month_emotion.drop(['value_x', 'value_y'], axis=1)
 
 # Treemap
 st.markdown("""<hr style="height:1px; border:none; color:#333; background-color:#333;"/>""", unsafe_allow_html=True)
-st.subheader('1. Relative number of days (%)')
+st.subheader('How often have I experienced each feeling?')
 st.markdown("""
-    These visualizations show the overall proportion of each emotion across all observed days, 
+    These visualizations offer two compact views to inspect the weight of each emotion over all observed days, 
     grouped into positive and negative categories.
     """)
 df_n_days = df_month_emotion.groupby('emotion').agg({'value': sum}).reindex(emotion_list).reset_index()
@@ -313,18 +308,23 @@ df_n_days['emotion_type'] = list(np.repeat('positive emotion', 4)) + list(np.rep
 dict_emotion_color_extended = dict_emotion_color
 dict_emotion_color_extended.update({'(?)': 'white'})
 
-tab1, tab2 = st.tabs(["Waffle chart", "Treemap"])
-with tab1:
-    col1, _ = st.columns([2, 1])
-    with col1:
-        df_n_days['perc_value'] = round(100*df_n_days['value']/df_n_days['value'].sum()).astype(int)
-        df_n_days['emotion_type'] = list(np.repeat('positive emotion', 4)) + list(np.repeat('negative emotion', 4))
-        df_waffle = df_n_days.sort_values(by=['emotion_type', 'perc_value'], ascending=[False, False])
-        waffle_dict = df_waffle.set_index('emotion')[['perc_value']].to_dict()['perc_value']
-        waffle_dict_new = {}
-        for el in waffle_dict:
-            waffle_dict_new[el] = dict_emotion_color[el]
-        fig = plt.figure(
+df_n_days['perc_value'] = round(100 * df_n_days['value'] / df_n_days['value'].sum()).astype(int)
+df_n_days['emotion_type'] = list(np.repeat('positive emotion', 4)) + list(np.repeat('negative emotion', 4))
+df_waffle = df_n_days.sort_values(by=['emotion_type', 'perc_value'], ascending=[False, False])
+waffle_dict = df_waffle.set_index('emotion')[['perc_value']].to_dict()['perc_value']
+waffle_dict_new = {}
+for el in waffle_dict:
+    waffle_dict_new[el] = dict_emotion_color[el]
+
+col1, col2 = st.columns([1, 2], gap="large")
+with col1:
+    tab1, tab2 = st.tabs(["A waffle chart", "Just percentages"])
+    with tab1:
+        fig = plt.figure(figsize=(4, 5))
+        ax = fig.add_subplot(111)
+        ax.set_aspect(aspect="equal")
+        Waffle.make_waffle(
+            ax=ax,
             FigureClass=Waffle,
             rows=10,
             columns=10,
@@ -332,51 +332,73 @@ with tab1:
             colors=[str(el) for el in waffle_dict_new.values()],
             icon_style='solid',
             icon_legend=True,
-            icons=['sun', 'sun', 'sun', 'sun', 'cloud-showers-heavy', 'cloud-showers-heavy', 'cloud-showers-heavy', 'cloud-showers-heavy'],
+            icon_size='large',
+            icons=['sun', 'sun', 'sun', 'sun', 'cloud-showers-heavy', 'cloud-showers-heavy', 'cloud-showers-heavy',
+                   'cloud-showers-heavy'],
             block_arranging_style='snake',
-            legend={
-                'labels': [f"{k} ({v}%)" for k, v in waffle_dict.items()],
-                'loc': 'upper left',
-                'bbox_to_anchor': (1, 1),
-                'framealpha': 0,
-                'fontsize': 9,
-            },
+            # legend={
+            #    'labels': [f"{k} ({v}%)" for k, v in waffle_dict.items()],
+            #   'loc': 'upper left',
+            #    'bbox_to_anchor': (1, 1),
+            #    'framealpha': 0,
+            #    'fontsize': 5,
+            # }
         )
+        ax.get_legend().remove()
         for item in [fig, ax]:
             item.patch.set_visible(False)
-        st.pyplot(fig)
-with tab2:
+        st.pyplot(fig, dpi=1000, use_container_width=True)
+    with tab2:
+        col11, col12, _ = st.columns([1, 1, 1])
+        col11.metric(list(waffle_dict.keys())[0], f'{list(waffle_dict.values())[0]}%')
+        col11.metric(list(waffle_dict.keys())[1], f'{list(waffle_dict.values())[1]}%')
+        col11.metric(list(waffle_dict.keys())[2], f'{list(waffle_dict.values())[2]}%')
+        col11.metric(list(waffle_dict.keys())[3], f'{list(waffle_dict.values())[3]}%')
+        col12.metric(list(waffle_dict.keys())[4], f'{list(waffle_dict.values())[4]}%')
+        col12.metric(list(waffle_dict.keys())[5], f'{list(waffle_dict.values())[5]}%')
+        col12.metric(list(waffle_dict.keys())[6], f'{list(waffle_dict.values())[6]}%')
+        col12.metric(list(waffle_dict.keys())[7], f'{list(waffle_dict.values())[7]}%')
+with col2:
     col1, _ = st.columns([2, 1])
     with col1:
-        fig = px.treemap(
-            df_n_days,
-            path=[px.Constant("all"), 'emotion_type', 'emotion'],
-            values='value',
-            color='emotion',
-            color_discrete_map=dict_emotion_color_extended,
-        )
-        fig.update_layout(
-            height=380,
-            margin=dict(t=20, b=0, r=50),
-        )
-        fig.update_traces(
-            marker=dict(cornerradius=2),
-            marker_line_width=1,
-            marker_line_color='black'
-        )
-        fig.data[0].textinfo = 'label+text+percent entry'
-        fig.data[0].textinfo = 'label+text+percent entry'
-        fig.data[0].hovertemplate = 'emotion=%{label}<br>number of days=%{value}'
-
-        st.plotly_chart(fig, config=config_modebar)
+        tab1, tab2 = st.tabs(["A tree map", "-"])
+        with tab1:
+            fig = px.treemap(
+                df_n_days,
+                path=[px.Constant("all"), 'emotion_type', 'emotion'],
+                values='value',
+                color='emotion',
+                color_discrete_map=dict_emotion_color_extended,
+            )
+            fig.update_layout(
+                height=300,
+                margin=dict(t=1, b=0, r=1)
+            )
+            fig.update_traces(
+                marker=dict(cornerradius=2),
+                marker_line_width=1,
+                marker_line_color='black'
+            )
+            fig.data[0].textinfo = 'label+text+percent entry'
+            fig.data[0].textinfo = 'label+text+percent entry'
+            fig.data[0].hovertemplate = 'emotion=%{label}<br>number of days=%{value}'
+            st.plotly_chart(fig, config=config_modebar, use_container_width=True)
+            st.markdown("Luckily, I've been happy most of the time!")
+            st.markdown("""
+            A quick note on what I mean by *happy*, as these emotions reflect the predominant feeling in the
+            background of each day, and not its intensity. For that, I used the smiley scale (see the chart above) 
+            that captures peak moments, whether positive or negative (true highs and lows). 
+            So *happy* days without an intensity marker are simply days when I felt *okay*,
+            with an overall sense of calm and balance.
+            """)
 
 ####################
 
 # Trend over time
 st.markdown("""<hr style="height:1px; border:none; color:#333; background-color:#333;"/>""", unsafe_allow_html=True)
-st.subheader('2. Trend over time')
+st.subheader('Trend over time')
 
-col1, _ = st.columns([3, 1])
+col1, _ = st.columns([2, 1])
 with col1:
     st.markdown("""
     This visualization shows how emotions change over time, displaying the number of days each emotion is felt in different months.
@@ -411,11 +433,11 @@ with col1:
         xaxis_title="",
         yaxis_title="number of days",
         xaxis=dict(showgrid=False, tickcolor='black', color='black', linewidth=1, gridwidth=1, gridcolor='darkgray'),
-        yaxis=dict(showgrid=False, tickcolor='black', color='black', linewidth=1, gridwidth=1, gridcolor='black'),
+        yaxis=dict(showgrid=True, tickcolor='black', color='black', linewidth=1, gridwidth=1, gridcolor='darkgray'),
         margin=dict(t=20),
         showlegend=False
     )
-    st.plotly_chart(fig, config=config_modebar)
+    st.plotly_chart(fig, config=config_modebar, dpi=1000, use_container_width=True)
 
 st.markdown("##### Visualizing totals")
 col1, _ = st.columns([3, 1])
@@ -427,7 +449,7 @@ with col1:
         (which one do you think works better?).
     """)
 
-col1, _ = st.columns([3, 1])
+col1, _ = st.columns([2, 1])
 with col1:
     tab1, tab2 = st.tabs(["Stacked bar chart", "Radial stacked bar chart"])
     with tab1:
