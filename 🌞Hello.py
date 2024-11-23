@@ -241,7 +241,7 @@ with col1:
             ax.set_xlabel('')
             for item in [fig, ax]:
                 item.patch.set_visible(False)
-            st.pyplot(fig, dpi=2000, use_container_width=True)
+            st.pyplot(fig, dpi=1000, use_container_width=True)
             #st.markdown('#')
 
     with tab2:
@@ -266,7 +266,7 @@ with col1:
         ax.set_xlabel('')
         for item in [fig, ax]:
             item.patch.set_visible(False)
-        st.pyplot(fig, dpi=2000, use_container_width=True)
+        st.pyplot(fig, dpi=1000, use_container_width=True)
 
 
 ##########################
