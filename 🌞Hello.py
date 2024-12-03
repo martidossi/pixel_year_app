@@ -152,7 +152,7 @@ with col2:
         - Is there a connection between watching movies and my emotional state?
         - What about cross-influences? For instance, do specific days of the year correlate with movies, or do cities and movies affect each other?
         """, unsafe_allow_html=True)
-    st.markdown("**Explore the other pages:**")
+    st.markdown("**Navigate the sidebar or explore the other pages:**")
     st.page_link("pages/1_🎞Movies.py", label="Movies", icon="🎞")
     st.page_link("pages/2_🌈100_Happy_days_challenge.py", label="100 Happy days challenge", icon="🌈")
     st.page_link("pages/3_📌Take-aways.py", label="Take-aways", icon="📌")
