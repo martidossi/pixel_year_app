@@ -567,9 +567,9 @@ df_days_counts = df_days[['weekday', 'emotion']].value_counts().reset_index()
 df_agg_weekday = df_days.weekday.value_counts().reset_index().rename(columns={'count': 'n_weekday'})
 df_agg_emotion = df_days.emotion.value_counts().reset_index().rename(columns={'count': 'n_emotion'})
 #df_days_counts = df_days_counts.merge(df_agg_weekday, on='weekday', how='left')
-df_days_counts = df_days_counts.set_index('weekday').join(df_agg_weekday.set_index('weekday'), how='left').reset_index()
+df_days_counts = df_days_counts.set_index('weekday').join(df_agg_weekday.set_index('weekday'), how='left', lsuffix='_left', rsuffix='_right').reset_index()
 #df_days_counts = df_days_counts.merge(df_agg_emotion, on='emotion', how='left')
-df_days_counts = df_days_counts.set_index('emotion').join(df_agg_emotion.set_index('emotion'), how='left').reset_index()
+df_days_counts = df_days_counts.set_index('emotion').join(df_agg_emotion.set_index('emotion'), how='left', lsuffix='_left', rsuffix='_right').reset_index()
 st.dataframe(df_days_counts)
 df_days_counts['perc_emotion'] = df_days_counts['count']*100/df_days_counts['n_emotion']
 df_days_counts['perc_weekday'] = df_days_counts['count']*100/df_days_counts['n_weekday']
