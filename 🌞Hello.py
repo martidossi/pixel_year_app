@@ -567,7 +567,7 @@ df_days_counts = df_days[['weekday', 'emotion']].value_counts().reset_index()
 df_agg_weekday = df_days.weekday.value_counts().reset_index()
 df_agg_weekday.columns = ['weekday', 'n_weekday']
 df_agg_emotion = df_days.emotion.value_counts().reset_index()
-df_agg_weekday.columns = ['emotion', 'n_emotion']
+df_agg_emotion.columns = ['emotion', 'n_emotion']
 #st.dataframe(df_agg_weekday)
 #st.dataframe(df_agg_emotion)
 #st.dataframe(df_days_counts)
