@@ -572,6 +572,7 @@ df_days_counts['weekday'] = df_days_counts['weekday'].astype(str)
 df_days_counts['emotion'] = df_days_counts['emotion'].astype(str)
 df_days_counts = df_days_counts.merge(df_agg_weekday, on='weekday', how='left')
 df_days_counts = df_days_counts.merge(df_agg_emotion, on='emotion', how='left')
+df_days_counts['count'] = df_days_counts['count'].astype(int)
 df_days_counts['perc_emotion'] = df_days_counts['count']*100/df_days_counts['n_emotion']
 df_days_counts['perc_weekday'] = df_days_counts['count']*100/df_days_counts['n_weekday']
 df_days_counts['emotion_color'] = df_days_counts.emotion.map(dict_emotion_color)
