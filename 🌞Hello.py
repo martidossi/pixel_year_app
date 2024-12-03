@@ -10,7 +10,10 @@ from utils import *
 from annotated_text import annotation
 from itertools import product
 import plotly.express as px
+import plotly.graph_objects as go
 from pywaffle import Waffle
+import datetime
+from time import strptime
 
 
 ## Setting
@@ -117,11 +120,11 @@ col1, col2 = st.columns(2, gap='large')
 with col1:
     st.markdown(
         f"""
-        🔍 Data is a lens to bring clarity to the complexities of the world around us,
-        helping us make sense of what might otherwise seem chaotic.
+        🔍 Data acts as a lens that we can leverage to unravel the world’s complexity, turning what might seem
+        chaotic and convoluted into something more structured and transparent.
         
         ✍️ Self-reported data serves the same purpose, yet shifts the focus inward, 
-        accompanying facts with personal narratives that reveal who we are and the stories we carry within.
+        explaining facts with personal narratives that reveal who we are and the stories we carry within.
         
         🌟 In this context, data visualization becomes a tool for self-discovery,
         helping us see patterns that might otherwise remain hidden. 
@@ -149,6 +152,10 @@ with col2:
         - Is there a connection between watching movies and my emotional state?
         - What about cross-influences? For instance, do specific days of the year correlate with movies, or do cities and movies affect each other?
         """, unsafe_allow_html=True)
+    st.markdown("**Explore the other pages:**")
+    st.page_link("pages/1_🎞Movies.py", label="Movies", icon="🎞")
+    st.page_link("pages/2_🌈100_Happy_days_challenge.py", label="100 Happy days challenge", icon="🌈")
+    st.page_link("pages/3_📌Take-aways.py", label="Take-aways", icon="📌")
 
 st.markdown("""<hr style="height:1px; border:none; color:#333; background-color:#333;"/>""", unsafe_allow_html=True)
 
@@ -206,43 +213,45 @@ df_intensity = (
 )
 
 # Visualization
-col1, _ = st.columns([3, 1], gap='large')
+col1, col2 = st.columns([1, 1], gap='large')
 with col1:
-    st.markdown(
-        """#### A *pixel year* is a visual representation of personal emotions over the course of a year, where each day is assigned to the color that reflects the dominant mood or feeling of that day."""
-    )
     st.markdown("""
-        The emotion wheel in the sidebar is the reference I considered for the project.
-        I relied on its eight core emotions (four positive, four negative) to classify each day, with the outer emotions helping 
-        to capture different shades of feeling. 
+        A *pixel year* is a visual representation of personal emotions over the course of a year, 
+        where each day is assigned to the color that reflects the dominant mood or feeling of that day.
+        I considered the emotion wheel in the sidebar as main reference for the project.
+        In particular, I relied on its eight core emotions (four positive, four negative) to classify each day, 
+        with the outer emotions helping to capture different shades of feeling. 
+        """)
+with col2:
+    st.markdown("""
         Each day, I tracked both the prevailing feeling and the related intensity (see the two tabs). 
         Squares without any smile are just neutral, whereas positive pixels may be good `:)` or very good `:))` days,
         as well as negative ones can be bad `:(` or very bad `:((` days.
         """)
-    col11, _ = st.columns([3, 1], gap='large')
-    with col11:
-        tab1, tab2 = st.tabs(["Prevailing feeling", "Intensity"])
-        with tab1:
-            fig, ax = plt.subplots(figsize=(10, 10))
-            ax = sns.heatmap(
-                df_emotion_id.transpose(),
-                cmap=list(dict_emotion_color.values()),
-                cbar=False,
-                linewidths=1.4,
-                linecolor='white',
-                square=True,
-                vmin=0,
-                vmax=len(dict_emotion_color),
-                xticklabels=1,
-                ax=ax
-            )
-            ax.set_yticklabels(labels=['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'], rotation=0, fontsize=8)
-            ax.set_xticklabels(labels=list(df_emotion_id.index), rotation=0, fontsize=8)
-            ax.set_xlabel('')
-            for item in [fig, ax]:
-                item.patch.set_visible(False)
-            st.pyplot(fig, dpi=1000, use_container_width=True)
-            #st.markdown('#')
+col1, _ = st.columns([4, 2], gap='large')
+with col1:
+    tab1, tab2 = st.tabs(["Prevailing feeling", "Intensity"])
+    with tab1:
+        fig, ax = plt.subplots(figsize=(10, 10))
+        ax = sns.heatmap(
+            df_emotion_id.transpose(),
+            cmap=list(dict_emotion_color.values()),
+            cbar=False,
+            linewidths=1.4,
+            linecolor='white',
+            square=True,
+            vmin=0,
+            vmax=len(dict_emotion_color),
+            xticklabels=1,
+            ax=ax
+        )
+        ax.set_yticklabels(labels=['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'], rotation=0, fontsize=8)
+        ax.set_xticklabels(labels=list(df_emotion_id.index), rotation=0, fontsize=8)
+        ax.set_xlabel('')
+        for item in [fig, ax]:
+            item.patch.set_visible(False)
+        st.pyplot(fig, dpi=1000, use_container_width=True)
+        #st.markdown('#')
 
     with tab2:
         labels = df_intensity.transpose().replace('0', '').replace('Missing', '').replace(':|', '')
@@ -359,7 +368,7 @@ with col1:
         col12.metric(list(waffle_dict.keys())[6], f'{list(waffle_dict.values())[6]}%')
         col12.metric(list(waffle_dict.keys())[7], f'{list(waffle_dict.values())[7]}%')
 with col2:
-    col1, _ = st.columns([2, 1])
+    col1, _ = st.columns([3, 1])
     with col1:
         tab1, tab2 = st.tabs(["A tree map", "-"])
         with tab1:
@@ -383,27 +392,27 @@ with col2:
             fig.data[0].textinfo = 'label+text+percent entry'
             fig.data[0].hovertemplate = 'emotion=%{label}<br>number of days=%{value}'
             st.plotly_chart(fig, config=config_modebar, use_container_width=True)
-            st.markdown("Luckily, I've been happy most of the time!")
-            st.markdown("""
-            A quick note on what I mean by *happy*, as these emotions reflect the predominant feeling in the
-            background of each day, and not its intensity. For that, I used the smiley scale (see the chart above) 
-            that captures peak moments, whether positive or negative (true highs and lows). 
-            So *happy* days without an intensity marker are simply days when I felt *okay*,
-            with an overall sense of calm and balance.
-            """)
+st.markdown("Luckily, I've been happy most of the time!")
+st.markdown("""
+*A quick note on what I mean by *happy*, as these emotions reflect the predominant feeling in the
+background of each day, and not its intensity. For that, I used the smiley scale (see the chart above) 
+that captures peak moments, whether positive or negative. So, *happy* days without an intensity marker
+are simply days when I felt *okay*, with an overall sense of calm and balance.
+""")
 
 ####################
 
 # Trend over time
 st.markdown("""<hr style="height:1px; border:none; color:#333; background-color:#333;"/>""", unsafe_allow_html=True)
 st.subheader('Trend over time')
-
+st.markdown("""
+How have I been feeling over time?
+This chart shows how my emotions have changed month by month, counting the days I felt each one.
+Surprisingly, even though I'm a winter person, it looks like I really enjoyed the summer months,
+especially July —which turned out to be the happiest month!
+""")
 col1, _ = st.columns([2, 1])
 with col1:
-    st.markdown("""
-    This visualization shows how emotions change over time, displaying the number of days each emotion is felt in different months.
-    The widget on the right lets you select and highlight specific emotions.
-    """)
     #sel_status = st.multiselect("Pick one or more emotions:", emotion_list, [])
     sel_status = []
     fig = px.line(
@@ -440,14 +449,12 @@ with col1:
     st.plotly_chart(fig, config=config_modebar, dpi=1000, use_container_width=True)
 
 st.markdown("##### Visualizing totals")
-col1, _ = st.columns([3, 1])
-with col1:
-    st.markdown("""
-        This visualization captures the emotional composition of each month by summing up all the emotions.
-        The two visual models, designed with identical data and purpose, are for comparison and experimentation.
-        For different reasons, I like both of them, although they work quite differently
-        (which one do you think works better?).
-    """)
+st.markdown("""
+    These visualizations capture the emotional composition of each month by summing up all the emotions.
+    The two visual models, designed with identical data and purpose, are for comparison and experimentation.
+    For different reasons, I like both of them, although they work quite differently
+    (which one do you think works better?).
+""")
 
 col1, _ = st.columns([2, 1])
 with col1:
@@ -536,3 +543,143 @@ with col1:
             the whole data look skewed (more about this
             [here](https://www.data-to-viz.com/caveat/circular_bar_yaxis.html)).
            """)
+
+######## days viz
+days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+dict_emotion_id_2 = {
+    'Happy': 1,
+    'Loved': 2,
+    'Confident': 3,
+    'Playful': 4,
+    'Scared': 5,
+    'Sad': 6,
+    'Angry': 7
+}
+df_days = df_melt.copy()
+df_days['month_abb'] = [el[:3] for el in df_melt.month]
+df_days['month_id'] = df_days['month_abb'].apply(lambda x: strptime(x,'%b').tm_mon)
+df_days['date'] = [datetime.datetime(year=2024, month=el[0], day=el[1]) for el in zip(df_days.month_id, df_days.day)]
+df_days['weekday_id'] = df_days['date'].apply(lambda x: x.weekday()+1)
+df_days['weekday'] = df_days['date'].apply(lambda x: days[x.weekday()])
+df_days['emotion_id'] = df_days.emotion.map(dict_emotion_id_2)
+df_days_counts = df_days[['weekday', 'emotion']].value_counts().reset_index()
+
+df_agg_weekday = df_days.weekday.value_counts().reset_index().rename(columns={'count': 'n_weekday'})
+df_agg_emotion = df_days.emotion.value_counts().reset_index().rename(columns={'count': 'n_emotion'})
+df_days_counts = df_days_counts.merge(df_agg_weekday, on='weekday', how='left').merge(df_agg_emotion, on='emotion', how='left')
+df_days_counts['perc_emotion'] = df_days_counts['count']*100/df_days_counts['n_emotion']
+df_days_counts['perc_weekday'] = df_days_counts['count']*100/df_days_counts['n_weekday']
+df_days_counts['emotion_color'] = df_days_counts.emotion.map(dict_emotion_color)
+
+
+def days_emotion_chart(df_days_counts, perc_feature):
+    fig = go.Figure()
+
+    # Add the scatter trace
+    fig.add_trace(
+        go.Scatter(
+            x=df_days_counts.weekday,
+            y=df_days_counts.emotion,
+            mode='markers',
+            marker=dict(
+                symbol='square',
+                color=df_days_counts.emotion_color,
+                size=df_days_counts[perc_feature],
+                sizemode='area',
+                sizeref=2. * max(df_days_counts[perc_feature]) / (40. ** 2),
+                sizemin=4
+            ),
+            text=df_days_counts['count'],  # Optional if you want additional hover details
+            hovertemplate=(
+                "weekday=%{x}<br>"
+                "emotion=%{y}<br>"
+                "number of times=%{text}<br>"  # Absolute value
+                "percentage=%{marker.size:.2f}%"  # Use size for percentage
+            )
+        )
+    )
+
+    # Set the aspect ratio to 1:1
+    fig.update_layout(
+        xaxis=dict(
+            categoryorder="array",  # Sort by array order
+            categoryarray=days,  # Specify the order
+        ),
+        yaxis=dict(
+            categoryorder="array",  # Sort by array order
+            categoryarray=list(dict_emotion_id_2.keys()),  # Specify the order
+        ),
+        autosize=False,
+        width=300,  # Fixed width
+        height=400,  # Fixed height
+        margin=dict(l=0, r=0, t=0, b=60),  # Margins
+        template="plotly_white",  # Clean look
+        scene=dict(aspectmode="cube")  # Enforce equal scaling for all axes
+    )
+    return st.plotly_chart(fig, config=config_modebar, dpi=500, use_container_width=True)
+
+st.markdown("##### Trend by weekday")
+st.markdown("""
+    What's my fav day of the week? 
+    The two charts below both show the trends of my emotional states day by day.
+    I’ve represented them twice, to get insights from different perspectives.
+    In the first chart, counts are normalized by day of the week, to show the percentages
+    of different emotions each day (with the sum for each day equaling 100%).
+    In the second, counts are normalized by emotion, to highlight the distribution of days on
+    which I felt each emotion (with the sum for each emotion also equaling 100%).
+    """)
+col1, _ = st.columns([4, 1])
+with col1:
+    col1, col2 = st.columns([1, 1])
+    with col1:
+        tab1, tab2 = st.tabs(["Count normalized by day of the week:", "-"])
+        with tab1:
+            days_emotion_chart(df_days_counts, perc_feature='perc_weekday')
+    with col2:
+        tab1, tab2 = st.tabs(["Count normalized by emotion:", "-"])
+        with tab1:
+            days_emotion_chart(df_days_counts, perc_feature='perc_emotion')
+
+st.markdown("##### Ranking by month")
+col1, _ = st.columns([3, 1])
+with col1:
+    st.markdown("""
+        In these visualizations, the focus shifts to the monthly trend of each emotion.
+        By default, data are ranked by month. The button below allows to switch the visualizations to sort 
+        by percentage values.
+        """)
+    sorting_criteria = 'month'
+    on = st.toggle("Sort each series by prevailing emotion (🧘this can take a while)")
+    if on:
+        sorting_criteria = 'emotion'
+    fig, ax = plt.subplots(3, 2, figsize=(15, 16))
+    ax = ax.flatten()
+    emotions = [
+        'Happy',
+        'Loved',
+        'Confident',
+        'Playful',
+        'Scared',
+        'Sad'
+    ]
+    sorted_month = list(df_emotion.columns)
+    sorted_month.reverse()
+    for i, emotion in enumerate(emotions):
+        df_filt = df_melt[df_melt.emotion == emotion]
+        if sorting_criteria == 'month':
+            df_plot = (df_filt.month.value_counts() / df_filt.shape[0]).reindex(sorted_month).fillna(0).reset_index()
+        if sorting_criteria == 'emotion':
+            df_plot = (df_filt.month.value_counts() / df_filt.shape[0]).reindex(sorted_month).fillna(
+                0).reset_index().sort_values(by='count')
+        range_plot = range(1, 1 + df_plot.shape[0])
+        ax[i].hlines(y=range_plot, xmin=0, xmax=df_plot['count'], color=dict_emotion_color[emotion])
+        ax[i].plot(df_plot['count'], range_plot, "o", color=dict_emotion_color[emotion])
+        ax[i].set_yticks(range(1, 1 + df_plot.shape[0]), df_plot['month'])
+        ax[i].set_xlabel(f'Percentage of "{emotion.lower()}" days')
+        ax[i].spines['top'].set_visible(False)
+        ax[i].spines['right'].set_visible(False)
+        ax[i].grid(axis='x', ls=':')
+        vals = ax[i].get_xticks()[1:-1]
+        ax[i].set_xticks(vals, ['{:,.0%}'.format(x) for x in vals])
+    st.pyplot(fig, dpi=500, use_container_width=True)
+
