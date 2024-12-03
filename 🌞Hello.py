@@ -673,9 +673,12 @@ with col1:
         df_filt = df_melt[df_melt.emotion == emotion]
         if sorting_criteria == 'month':
             df_plot = (df_filt.month.value_counts() / df_filt.shape[0]).reindex(sorted_month).fillna(0).reset_index()
+            df_plot.columns = ['month', 'count']
         if sorting_criteria == 'emotion':
             df_plot = (df_filt.month.value_counts() / df_filt.shape[0]).reindex(sorted_month).fillna(
-                0).reset_index().sort_values(by='count')
+                0).reset_index()
+            df_plot.columns = ['month', 'count']
+            df_plot = df_plot.sort_values(by='count')
         range_plot = range(1, 1 + df_plot.shape[0])
         ax[i].hlines(y=range_plot, xmin=0, xmax=df_plot['count'], color=dict_emotion_color[emotion])
         ax[i].plot(df_plot['count'], range_plot, "o", color=dict_emotion_color[emotion])
