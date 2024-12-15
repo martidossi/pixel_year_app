@@ -1,6 +1,6 @@
 import sys
 from streamlit_gsheets import GSheetsConnection
-import base64
+# import base64
 import yaml
 import pandas as pd
 import numpy as np
@@ -15,6 +15,9 @@ from pywaffle import Waffle
 import datetime
 from time import strptime
 
+# dataviz custom plots
+from viz_functions import  days_emotion_chart
+
 
 ## Setting
 st.set_page_config(
@@ -23,37 +26,16 @@ st.set_page_config(
     layout="wide"
 )
 # st.image("pics/cover.png")
-def set_bg_hack(main_bg):
-    '''
-    A function to unpack an image from root folder and set as bg.
-
-    Returns
-    -------
-    The background.
-    '''
-    # set bg name
-    main_bg_ext = "png"
-
-    st.markdown(
-        f"""
-         <style>
-         .stApp {{
-             background: url(data:image/{main_bg_ext};base64,{base64.b64encode(open(main_bg, "rb").read()).decode()});
-             background-size: cover
-         }}
-         </style>
-         """,
-        unsafe_allow_html=True
-    )
-
-#set_bg_hack('pics/cover_v.png')
+# set_bg_hack('pics/cover_v.png')
 
 sys.path.insert(0, "..")
 local_css("style.css")
 
 st.sidebar.subheader('(A Year in Pixel) legend')
-st.sidebar.markdown("The colors below are those used in the *pixel-year-related* visualizations and are based on the "
-                    "**emotion wheel** developed by [Human Systems](https://humansystems.co/emotionwheels/).")
+st.sidebar.markdown("""
+    The colors below are those used in the *pixel-year-related* visualizations and are based on the
+    **emotion wheel** developed by [Human Systems](https://humansystems.co/emotionwheels/).
+    """)
 st.sidebar.markdown("""
     <span class='happy_square'></span> Happy <br>
     <span class='loved_square'></span> Loved <br>
@@ -113,8 +95,8 @@ st.markdown("### " + text_1 + str(annotation(" personal data", "", "#fea"))
 
 st.markdown("""<hr style="height:1px; border:none; color:#333; background-color:#333;"/>""", unsafe_allow_html=True)
 
-#import streamlit.components.v1 as components
-#components.html("""<hr style="height:2px;border:none;color:#333;background-color:#333;" /> """)
+# import streamlit.components.v1 as components
+# components.html("""<hr style="height:2px;border:none;color:#333;background-color:#333;" /> """)
 col1, col2 = st.columns(2, gap='large')
 
 with col1:
@@ -159,25 +141,28 @@ with col2:
 
 st.markdown("""<hr style="height:1px; border:none; color:#333; background-color:#333;"/>""", unsafe_allow_html=True)
 
-# Title
-st.markdown("# A Year in :rainbow[Pixel]")
+# connection to g spreadsheet and data loading
 conn = st.connection("gsheets", type=GSheetsConnection)
-config_modebar = {'displayModeBar': False}
+@st.cache_data
+def load_data(worksheet_name, n_cols, n_rows):
+    df = conn.read(
+        worksheet=worksheet_name,
+        ttl="10m",
+        usecols=range(n_cols),
+        nrows=n_rows
+    )
+    return df
 
+# config
 with open("config.yml", 'r') as f:
     cfg = yaml.safe_load(f)
 
-# Heatmap
 dict_emotion_id = cfg['map_emotion_id']
 dict_emotion_color = cfg['map_emotion_color']
+config_modebar = {'displayModeBar': False}
 
 # Emotion df
-df_emotion = conn.read(
-    worksheet="pixel_year",
-    ttl="10m",
-    usecols=range(13),
-    nrows=31
-)
+df_emotion = load_data("pixel_year", 13, 31)
 df_emotion = (
     df_emotion
     .rename(columns={'day/month': 'id_day'})
@@ -189,6 +174,15 @@ emotion_list = list(dict_emotion_color.keys())[2:]
 positive_emotion_list = emotion_list[:4]
 negative_emotion_list = emotion_list[4:]
 
+# Emotion intensity
+df_intensity = load_data("pixel_year_intensity", 13, 31)
+df_intensity = (
+    df_intensity
+    .rename(columns={'day/month': 'id_day'})
+    .set_index('id_day')
+    .fillna('0')
+)
+
 # Mapping emotions to numbers
 df_emotion_id = (
     pd.DataFrame([df_emotion[col].map(dict_emotion_id) for col in df_emotion.columns])
@@ -196,21 +190,8 @@ df_emotion_id = (
     .fillna(0)
     .astype(int)
 )
-from matplotlib.patches import Patch
-
-# Emotion intensity
-df_intensity = conn.read(
-    worksheet="pixel_year_intensity",
-    ttl="10m",
-    usecols=range(13),
-    nrows=31
-)
-df_intensity = (
-    df_intensity
-    .rename(columns={'day/month': 'id_day'})
-    .set_index('id_day')
-    .fillna('0')
-)
+# Title
+st.markdown("# A Year in :rainbow[Pixel]")
 
 # Visualization
 col1, col2 = st.columns([1, 1], gap='large')
@@ -455,7 +436,7 @@ st.markdown("""
     For different reasons, I like both of them, although they work quite differently
     (which one do you think works better?).
 """)
-
+st.dataframe(df_month_emotion)
 col1, _ = st.columns([2, 1])
 with col1:
     tab1, tab2 = st.tabs(["Stacked bar chart", "Radial stacked bar chart"])
@@ -546,6 +527,7 @@ with col1:
 
 ######## days viz
 days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+# Dropped emotions that are not used
 dict_emotion_id_2 = {
     'Happy': 1,
     'Loved': 2,
@@ -570,58 +552,10 @@ df_agg_emotion = df_days.emotion.value_counts().reset_index()
 df_agg_emotion.columns = ['emotion', 'n_emotion']
 
 df_days_counts = df_days_counts.merge(df_agg_weekday, on='weekday', how='left')
-#df_days_counts = df_days_counts.set_index('weekday').join(df_agg_weekday.set_index('weekday'), how='left', lsuffix='_left', rsuffix='_right').reset_index()
 df_days_counts = df_days_counts.merge(df_agg_emotion, on='emotion', how='left')
-#df_days_counts = df_days_counts.set_index('emotion').join(df_agg_emotion.set_index('emotion'), how='left', lsuffix='_left', rsuffix='_right').reset_index()
 df_days_counts['perc_emotion'] = df_days_counts['count']*100/df_days_counts['n_emotion']
 df_days_counts['perc_weekday'] = df_days_counts['count']*100/df_days_counts['n_weekday']
 df_days_counts['emotion_color'] = df_days_counts.emotion.map(dict_emotion_color)
-
-def days_emotion_chart(df_days_counts, perc_feature):
-    fig = go.Figure()
-
-    # Add the scatter trace
-    fig.add_trace(
-        go.Scatter(
-            x=df_days_counts.weekday,
-            y=df_days_counts.emotion,
-            mode='markers',
-            marker=dict(
-                symbol='square',
-                color=df_days_counts.emotion_color,
-                size=df_days_counts[perc_feature],
-                sizemode='area',
-                sizeref=2. * max(df_days_counts[perc_feature]) / (40. ** 2),
-                sizemin=4
-            ),
-            text=df_days_counts['count'],  # Optional if you want additional hover details
-            hovertemplate=(
-                "weekday=%{x}<br>"
-                "emotion=%{y}<br>"
-                "number of times=%{text}<br>"  # Absolute value
-                "percentage=%{marker.size:.2f}%"  # Use size for percentage
-            )
-        )
-    )
-
-    # Set the aspect ratio to 1:1
-    fig.update_layout(
-        xaxis=dict(
-            categoryorder="array",  # Sort by array order
-            categoryarray=days,  # Specify the order
-        ),
-        yaxis=dict(
-            categoryorder="array",  # Sort by array order
-            categoryarray=list(dict_emotion_id_2.keys()),  # Specify the order
-        ),
-        autosize=False,
-        width=300,  # Fixed width
-        height=400,  # Fixed height
-        margin=dict(l=0, r=0, t=0, b=60),  # Margins
-        template="plotly_white",  # Clean look
-        scene=dict(aspectmode="cube")  # Enforce equal scaling for all axes
-    )
-    return st.plotly_chart(fig, config=config_modebar, dpi=500, use_container_width=True)
 
 st.markdown("##### Trend by weekday")
 st.markdown("""
@@ -637,13 +571,17 @@ col1, _ = st.columns([4, 1])
 with col1:
     col1, col2 = st.columns([1, 1])
     with col1:
-        tab1, tab2 = st.tabs(["Count normalized by day of the week:", "-"])
+        tab1, _ = st.tabs(["Count normalized by day of the week:", "-"])
         with tab1:
-            days_emotion_chart(df_days_counts, perc_feature='perc_weekday')
+            days_emotion_chart(
+                df_days_counts, perc_feature='perc_weekday', days_list=days, emotions_list=list(dict_emotion_id_2.keys()), config_modebar=config_modebar
+            )
     with col2:
-        tab1, tab2 = st.tabs(["Count normalized by emotion:", "-"])
+        tab1, _ = st.tabs(["Count normalized by emotion:", "-"])
         with tab1:
-            days_emotion_chart(df_days_counts, perc_feature='perc_emotion')
+            days_emotion_chart(
+                df_days_counts, perc_feature='perc_emotion', days_list=days, emotions_list=list(dict_emotion_id_2.keys()), config_modebar=config_modebar
+            )
 
 st.markdown("##### Ranking by month")
 col1, _ = st.columns([3, 1])
