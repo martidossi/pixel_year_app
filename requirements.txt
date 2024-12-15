@@ -7,6 +7,7 @@ git+https://github.com/streamlit/gsheets-connection
 st_gsheets_connection
 PyYAML
 st-annotated-text
+st-clickable-images
 plotly==5.22.0
 pyyaml==6.0.1
 pywaffle
