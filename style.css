@@ -4,6 +4,14 @@
   padding: 0.5rem;
   margin-bottom: 1rem;
 }
+.consolas-font {
+        font-family: 'Consolas', monospace;
+        font-size: 12px;
+        }
+.rounded-image {
+        border-radius: 10px;
+        # border: 5px solid;
+    }
 .bold {
   padding-left: 1rem;
   font-weight: 700;
@@ -70,6 +78,51 @@
     background-color: #ca80e5;
     display: inline-block;
 }
+
+.friends_square {
+    height: 12px;
+    width: 12px;
+    background-color: #ffcc66;
+    display: inline-block;
+}
+
+.family_square {
+    height: 12px;
+    width: 12px;
+    background-color: #33cccc;
+    display: inline-block;
+}
+
+.flowers_square {
+    height: 12px;
+    width: 12px;
+    background-color: #339933;
+    display: inline-block;
+}
+
+.food_square {
+    height: 12px;
+    width: 12px;
+    background-color: #ff3366;
+    display: inline-block;
+}
+
+.dataviz_square {
+    height: 12px;
+    width: 12px;
+    background-color: #333399;
+    display: inline-block;
+}
+
+.other_square {
+    height: 12px;
+    width: 12px;
+    background-color: #ffffff;
+    display: inline-block;
+    display: inline-block;
+    border: 1px solid #000000; /* Black border with 2px thickness */
+}
+
 
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap'); 
 

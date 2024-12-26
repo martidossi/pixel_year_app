@@ -16,8 +16,7 @@ import datetime
 from time import strptime
 
 # dataviz custom plots
-from viz_functions import  days_emotion_chart
-
+from viz_functions import days_emotion_chart
 
 ## Setting
 st.set_page_config(
@@ -31,7 +30,7 @@ st.set_page_config(
 sys.path.insert(0, "..")
 local_css("style.css")
 
-st.sidebar.subheader('(A Year in Pixel) legend')
+st.sidebar.subheader('HOW TO READ: color legend')
 st.sidebar.markdown("""
     The colors below are those used in the *pixel-year-related* visualizations and are based on the
     **emotion wheel** developed by [Human Systems](https://humansystems.co/emotionwheels/).
@@ -82,64 +81,21 @@ st.sidebar.markdown("""
     - [Celebrating Daily Joys](https://public.tableau.com/app/profile/qingyue.li8346/viz/CelebratingDailyJoysFindingLoveinEverydayLifeIronviz2024_Qingyue/Dashboard1), Qingyue Li.
     """
     )
-st.sidebar.subheader('Made with 🫶 in [Streamlit](https://streamlit.io/)')
+st.sidebar.subheader("Made with 🫶 in Streamlit.")
+st.sidebar.markdown(
+    "[![Made with Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://streamlit.io)"
+)
 
-
-st.title("🌞 Ciao!")
-text_1 = "Welcome to my 2024 "
-text_2 = " collection"
+text_1 = "🌞 Ciao! Welcome to my 2024 "
+text_2 = " collection."
 st.markdown("### " + text_1 + str(annotation(" personal data", "", "#fea"))
             + text_2, unsafe_allow_html=True)
 # st.markdown("<h3>" + text + str(annotation("apple", "", "#fea")) + "</h3>", unsafe_allow_html=True)
 # st.write(st.secrets['connections'])
-
-st.markdown("""<hr style="height:1px; border:none; color:#333; background-color:#333;"/>""", unsafe_allow_html=True)
-
 # import streamlit.components.v1 as components
 # components.html("""<hr style="height:2px;border:none;color:#333;background-color:#333;" /> """)
-col1, col2 = st.columns(2, gap='large')
 
-with col1:
-    st.markdown(
-        f"""
-        🔍 Data acts as a lens that we can leverage to unravel the world’s complexity, turning what might seem
-        chaotic and convoluted into something more structured and transparent.
-        
-        ✍️ Self-reported data serves the same purpose, yet shifts the focus inward, 
-        explaining facts with personal narratives that reveal who we are and the stories we carry within.
-        
-        🌟 In this context, data visualization becomes a tool for self-discovery,
-        helping us see patterns that might otherwise remain hidden. 
-        
-        🫐 Inspired by the concept of [Data Humanism](https://giorgialupi.com/data-humanism-my-manifesto-for-a-new-data-wold),
-        this project explores the potential of small, subjective data.
-        Over the past year, I’ve been collecting data about my daily life that I found interesting
-        —partly to understand myself better, reflect on the past year once the collection is complete,
-        and also to experiment with a new project and see where it might lead, without predefined goals.
-        
-        🧶 The daily practice of tracking data has been a valuable discovery itself:
-        I practiced consistency, learned that this consistency works best
-        when I track only a few features, resisted the urge to introduce changes
-        to keep the collection simple and coherent, cursed myself when I forgot one or more days,
-        and felt the satisfaction of steady progress. 
-        """, unsafe_allow_html=True)
-
-with col2:
-    st.markdown(
-        f"""
-        🫧 Some relationships I aim to explore—my personal research questions—include:
-        - How do I feel throughout the year? Is there a correlation between my emotions and months, days, or weekends?
-        - What is my favourite days? How do I feel during weekends? Which season brings me the most happiness?
-        - Are my emotions influenced by my physical location? For example, how does going to the office affect my mood?
-        - Is there a connection between watching movies and my emotional state?
-        - What about cross-influences? For instance, do specific days of the year correlate with movies, or do cities and movies affect each other?
-        """, unsafe_allow_html=True)
-    st.markdown("**Navigate the sidebar or explore the other pages:**")
-    st.page_link("pages/1_🎞Movies.py", label="Movies", icon="🎞")
-    st.page_link("pages/2_🌈100_Happy_days_challenge.py", label="100 Happy days challenge", icon="🌈")
-    st.page_link("pages/3_📌Take-aways.py", label="Take-aways", icon="📌")
-
-st.markdown("""<hr style="height:1px; border:none; color:#333; background-color:#333;"/>""", unsafe_allow_html=True)
+# st.markdown("""<hr style="height:1px; border:none; color:#333; background-color:#333;"/>""", unsafe_allow_html=True)
 
 # connection to g spreadsheet and data loading
 conn = st.connection("gsheets", type=GSheetsConnection)
@@ -197,15 +153,15 @@ st.markdown("# A Year in :rainbow[Pixel]")
 col1, col2 = st.columns([1, 1], gap='large')
 with col1:
     st.markdown("""
-        A *pixel year* is a visual representation of personal emotions over the course of a year, 
-        where each day is assigned to the color that reflects the dominant mood or feeling of that day.
-        I considered the emotion wheel in the sidebar as main reference for the project.
-        In particular, I relied on its eight core emotions (four positive, four negative) to classify each day, 
-        with the outer emotions helping to capture different shades of feeling. 
+        A *pixel year* is a visual representation of personal emotions throughout a year,
+        where each day is associated with a color that reflects the dominant mood or feeling of that day.
+        For this project, I used the emotion wheel in the sidebar as my primary reference.
+        I primarily relied on its eight core emotions (four positive and four negative) to classify each day,
+        using the outer emotions to capture subtle variations in feelings, even if they were not explicitly recorded.
         """)
 with col2:
     st.markdown("""
-        Each day, I tracked both the prevailing feeling and the related intensity (see the two tabs). 
+        Each day, I tracked both the prevailing feeling and the related intensity (see the two tabs below). 
         Squares without any smile are just neutral, whereas positive pixels may be good `:)` or very good `:))` days,
         as well as negative ones can be bad `:(` or very bad `:((` days.
         """)
@@ -373,13 +329,13 @@ with col2:
             fig.data[0].textinfo = 'label+text+percent entry'
             fig.data[0].hovertemplate = 'emotion=%{label}<br>number of days=%{value}'
             st.plotly_chart(fig, config=config_modebar, use_container_width=True)
-st.markdown("Luckily, I've been happy most of the time!")
+st.markdown("From the chart, it seems I've been *happy* most of the time. But what do I mean by *happy*?")
 st.markdown("""
-*A quick note on what I mean by *happy*, as these emotions reflect the predominant feeling in the
-background of each day, and not its intensity. For that, I used the smiley scale (see the chart above) 
-that captures peak moments, whether positive or negative. So, *happy* days without an intensity marker
-are simply days when I felt *okay*, with an overall sense of calm and balance.
-""")
+    These emotions reflect the predominant feeling that shaped the background of each day, rather than its intensity.
+    For intensity, I referred to the *smiley* scale (see the chart above), which captures peak moments,
+    both positive and negative. Therefore, happy days without an intensity marker are simply days when I felt *okay*,
+    with a general sense of calm and balance.
+    """)
 
 ####################
 
@@ -436,7 +392,7 @@ st.markdown("""
     For different reasons, I like both of them, although they work quite differently
     (which one do you think works better?).
 """)
-st.dataframe(df_month_emotion)
+# st.dataframe(df_month_emotion)
 col1, _ = st.columns([2, 1])
 with col1:
     tab1, tab2 = st.tabs(["Stacked bar chart", "Radial stacked bar chart"])
