@@ -1,3 +1,10 @@
+# pixel-year-app
+
+![Python 3.11](https://img.shields.io/badge/python-3.11-blue?logo=python)
+![Made with Streamlit](https://img.shields.io/badge/Made%20with-Streamlit-ff4b4b?logo=streamlit)
+![Personal Project](https://img.shields.io/badge/Personal%20Project-%F0%9F%92%BC-blueviolet)
+![With Love](https://img.shields.io/badge/Made%20with%20%E2%9D%A4-ff69b4)
+
 # Try it now!
 Visit [pixelyearapp.streamlit.app](https://pixelyearapp.streamlit.app/) to use the app directly in your browser - no installation required!
 
