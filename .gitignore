@@ -163,4 +163,5 @@ profile_pic.jpeg
 
 .streamlit/secrets.toml
 
+.DS_Store
 pages/.DS_Store
