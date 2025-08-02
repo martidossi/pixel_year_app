@@ -18,3 +18,22 @@ Visit [pixelyearapp.streamlit.app](https://pixelyearapp.streamlit.app/) to use t
 - Is there a connection between watching movies and my emotional state?
 - How do I feel on days when I have a headache?
 - What about cross-influences? For instance, do specific days of the year correlate with movies, or do cities and movies affect each other?
+
+## 🛠️ Getting started
+For local installation, follow the steps below.
+1. Clone the repository
+   ```sh
+   git clone https://github.com/martidossi/pixel_year_app.git
+   ```
+2. Create a Python virtual env (named `streamlit-app-313`)
+   ```sh
+   conda create -n streamlit-app-313 python=3.13
+   ```
+3. Activate the env
+   ```sh
+   conda activate streamlit-app-313
+   ```
+4. Install dependencies
+   ```sh
+   pip install -r requirements.txt
+   ```
