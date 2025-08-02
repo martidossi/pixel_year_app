@@ -53,10 +53,10 @@ def days_emotion_chart(
             ),
             text=df_days_counts['count'],  # Hover text: the number of occurrences of each emotion
             hovertemplate=(
-                "Weekday: %{x}<br>"
-                "Emotion: %{y}<br>"
-                "Count: %{text}<br>"  # Absolute count
-                "Percentage: %{marker.size:.2f}%"  # Size as percentage
+                "weekday=%{x}<br>"
+                "emotion=%{y}<br>"
+                "count=%{text}<br>"  # Absolute count
+                "percentage=%{marker.size:.2f}%"  # Size as percentage
             )
         )
     )

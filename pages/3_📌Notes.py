@@ -18,13 +18,13 @@ if st.sidebar.button('Three cheers'):
     st.toast('Hooray!', icon='🎉')
 # st.sidebar.image("pics/feelings.jpeg", width=250)
 
-st.markdown("# My intention")
+st.markdown("# Considerations")
 col1, col2 = st.columns(2, gap='large')
 with col1:
     st.markdown(
         f"""
         🔍 Data acts as a lens that we can leverage to unravel the world’s complexity, turning what might seem
-        chaotic and convoluted into something more structured and transparent.
+        chaotic and convoluted into something much more structured and transparent.
 
         ✍️ Self-reported data serves the same purpose, yet shifts the focus inward, 
         explaining facts with personal narratives that reveal who we are and the stories we carry within.
@@ -47,20 +47,18 @@ with col1:
 
 with col2:
     st.image("pics/tree_barc.jpeg", width=300)
-    st.write("06/07/2024, Barcelona")
+    st.caption("06/07/2024, Barcelona")
 
 st.markdown(
     f"""
-    🫧 Some relationships I aim to explore—my personal research questions—include:
+    🫧 Some relationships I aim to explore —my personal research questions— include:
     - How do I feel throughout the year? Is there a correlation between my emotions and months, days, or weekends?
     - What is my favourite days? How do I feel during weekends? Which season brings me the most happiness?
     - Are my emotions influenced by my physical location? For example, how does going to the office affect my mood?
     - Is there a connection between watching movies and my emotional state?
     - What about cross-influences? For instance, do specific days of the year correlate with movies, or do cities and movies affect each other?
     """, unsafe_allow_html=True)
-st.markdown("**Navigate the sidebar or explore the other pages:**")
-st.page_link("pages/1_🌈100_Happy_Days_challenge.py", label="100 Happy Days challenge", icon="🌈")
-st.page_link("pages/2_📌Notes.py", label="Take-aways", icon="📌")
+
 
 
 

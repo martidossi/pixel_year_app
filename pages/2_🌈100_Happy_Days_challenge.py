@@ -10,15 +10,15 @@ from utils import *
 sys.path.insert(0, "..")
 local_css("style.css")
 
-st.title("100 Happy Days challenge")
-st.write("""
+st.title("🌈 100 Happy Days challenge")
+st.markdown("""
     This year, inspired by a close friend, I decided to take on this challenge for the last 100 days of 2024. 
     
     *“This challenge is about training your perception on things.”* [...] 
     *“It’s a fantastic reality check —you can’t always change the course of events, but you can always adapt your perception of it all.”*
      [URL](https://buffer.com/resources/100-happy-days-challenge/)
     
-    The challenge is not about being happy every single day; rather, it’s about uncovering small moments of gratitude—a glimmer of positivity to hold onto.
+    The challenge is not about being happy every single day; rather, it’s about uncovering small moments of gratitude, like a glimmer of positivity to hold onto.
     Even on days when such moments seem out of reach, they are always there, quietly waiting to be noticed. 
     It could be as simple as a kind gesture or a fleeting experience that brings a smile or a sense of hope that tough times will pass.
     Day by day, I’ve found how nurturing this habit of appreciating little things can profoundly shape how we navigate life
@@ -97,8 +97,11 @@ else:
         """, unsafe_allow_html=True)
 st.sidebar.markdown("""<hr style="height:1px; border:none; color:#333; background-color:#333;"/>""",
                     unsafe_allow_html=True)
-st.sidebar.subheader('HOW TO READ: color legend')
-st.sidebar.markdown("""Below is the full list of categories and their corresponding colors.""")
+st.sidebar.subheader('🔍 How to read')
+
+st.sidebar.markdown("""
+    **Color legend** | Below is the full list of categories and corresponding colors used to classify pictures.
+    """)
 st.sidebar.markdown("""
     <span class='family_square'></span> Family <br>
     <span class='friends_square'></span> Friends <br>
@@ -109,9 +112,8 @@ st.sidebar.markdown("""
     """, unsafe_allow_html=True
 )
 
-
-st.sidebar.markdown("""<hr style="height:2px; border:none; color:#333; background-color:#333;"/>""",
-                    unsafe_allow_html=True)
+st.sidebar.markdown("""<hr style="height:2px; border:none; color:#333; background-color:#333;"/>""", unsafe_allow_html=True)
+st.sidebar.subheader('📙 References')
 # st.sidebar.subheader('📙 References')
 url_video = "https://www.youtube.com/watch?v=J4UtPDaR3cA"
 st.sidebar.video(url_video)
