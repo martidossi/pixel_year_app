@@ -160,7 +160,9 @@ cython_debug/
 #.idea/
 
 profile_pic.jpeg
-
-.streamlit/secrets.toml
-
+.streamlit
+.DS_Store
 pages/.DS_Store
+pics/.DS_Store
+project_100happydays
+notebooks/notes
