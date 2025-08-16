@@ -65,11 +65,11 @@ st.markdown("""
 conn = st.connection("gsheets", type=GSheetsConnection)
 
 @st.cache_data
-def load_data(worksheet_name, n_cols, n_rows):
+def load_data(worksheet_name, n_cols, n_rows, cache_ttl):
     try:
         df = conn.read(
             worksheet=worksheet_name,
-            ttl=CACHE_TTL,
+            ttl=cache_ttl,
             usecols=range(n_cols),
             nrows=n_rows
         )
@@ -78,7 +78,7 @@ def load_data(worksheet_name, n_cols, n_rows):
         st.error(f"Error loading data: {e}")
         return None
 
-df = load_data(WORKSHEET_NAME, N_COLS, N_ROWS)
+df = load_data(WORKSHEET_NAME, N_COLS, N_ROWS, CACHE_TTL)
 
 @st.cache_data
 def encode_images_to_base64(image_paths):
