@@ -25,7 +25,7 @@ st.markdown("""
 st.sidebar.subheader('🔍 How to read')
 
 st.sidebar.markdown("""
-    **Color legend** | Colors below encodes different emotions (as introduced in the main page).
+    **Color legend** – Colors below encodes different emotions (as introduced in the main page).
     """)
 st.sidebar.markdown("""
     <span class='happy_square'></span> Happy <br>
@@ -38,6 +38,16 @@ st.sidebar.markdown("""
     <span class='sad_square'></span> Sad <br>
     """, unsafe_allow_html=True
 )
+
+# Add to your Notes page
+st.sidebar.markdown("**Shape legend** –")
+st.sidebar.markdown("""
+    <span class='weekend-circle'></span>Weekend day <br>
+    <span class='octagon'></span>Watched a movie <br>
+    <span class='journaling-diamond-star'></span>Journaling <br>
+    <span class='out-milan-line'></span>Out of Milan <br>
+    """, unsafe_allow_html=True)
+
 st.sidebar.markdown("""<hr style="height:2px; border:none; color:#333; background-color:#333;"/>""", unsafe_allow_html=True)
 st.sidebar.subheader('📙 References')
 st.sidebar.markdown("""

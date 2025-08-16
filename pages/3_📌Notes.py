@@ -7,12 +7,14 @@ sys.path.insert(0, "..")
 local_css("style.css")
 
 
+st.sidebar.image("pics/tree_barc.jpeg")
+st.sidebar.caption("06/07/2024, Barcelona")
+
 st.sidebar.markdown("""
     <span style="font-size:13px; font-style:italic;">If there's something this year has taught me, 
     it's to appreciate the detours; to enjoy the weird pit stops; to collect unexpected memories. 
     Anne-Laure Le Cunff.
 """, unsafe_allow_html=True)
-
 
 if st.sidebar.button('Three cheers'):
     st.toast('Hip!')
@@ -50,28 +52,33 @@ with col1:
         """, unsafe_allow_html=True)
 
 with col2:
-    st.image("pics/tree_barc.jpeg", width=300)
-    st.caption("06/07/2024, Barcelona")
-
-st.markdown(
-    f"""
-    🫧 Some relationships I aim to explore —my personal research questions— include:
-    - How do I feel throughout the year? Is there a correlation between my emotions and months, days, or weekends?
-    - What is my favourite days? How do I feel during weekends? Which season brings me the most happiness?
-    - Are my emotions influenced by my physical location? For example, how does going to the office affect my mood?
-    - Is there a connection between watching movies and my emotional state?
-    - What about cross-influences? For instance, do specific days of the year correlate with movies, or do cities and movies affect each other?
-    """, unsafe_allow_html=True)
-
-
-
-st.markdown("## Lessons learned")
-st.markdown("""
-    - the importance of tracking things consistently, even when it feels challenging;
-    - how categories and structure matter—and how I’d like to refine them for next year;
-    - that the exercise worked as a kind of personal journal, helping me revisit past moments and appreciate small joys (like in *100 Happy Days*);
-    - how tracking itself can shape behavior—for example, noticing patterns like watching many movies at the beginning and fewer later on
-""")
+    st.markdown(
+        f"""
+        🫧 Some relationships I aim to explore —my personal research questions— include:
+        - How do I feel throughout the year? Is there a correlation between my emotions and months, days, or weekends?
+        - What is my favourite days? How do I feel during weekends? Which season brings me the most happiness?
+        - Are my emotions influenced by my physical location? For example, how does going to the office affect my mood?
+        - Is there a connection between watching movies and my emotional state?
+        - What about cross-influences? For instance, do specific days of the year correlate with movies, or do cities and movies affect each other?
+        """, unsafe_allow_html=True)
+    st.markdown("## Lessons learned")
+    st.markdown("""
+        - the importance of tracking things consistently, even when it feels challenging;
+        - how categories and structure matter—and how I’d like to refine them for next year;
+        - that the exercise worked as a kind of personal journal, helping me revisit past moments and appreciate small joys (like in *100 Happy Days*);
+        - how tracking itself can shape behavior—for example, noticing patterns like watching many movies at the beginning and fewer later on
+    """)
 
 
 st.markdown("## The process")
+
+col1, col2 = st.columns(2, gap='small')
+with col1:
+    st.markdown("""
+    The data collection process was relatively simple. It involved three main steps:
+    1. **Google Form**: I created a Google Form that I could easily access from my phone every day to track features about my daily life (emotions, visited cities, movies watched, and other aspects).
+    2. **Google Sheets**: For the sake of clarity, I rearranged the data in cleaned and dedicated Google Sheets.
+    3. **Python**: I used Python to explore the data and find patterns, then Streamlit to visualize them in a meaningful and interactive way.
+    """)
+with col2:
+    st.image("pics/process.png")

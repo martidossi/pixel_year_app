@@ -5,8 +5,9 @@ import os
 import sys
 
 # Third-party imports
+import pandas as pd
 import streamlit as st
-import plotly.express as px
+import matplotlib.pyplot as plt
 from st_clickable_images import clickable_images
 from streamlit_gsheets import GSheetsConnection
 
@@ -37,7 +38,7 @@ CACHE_TTL = "10m"
 st.title(PAGE_TITLE)
 st.markdown("""
     This year, inspired by my dear friend [Oriana](https://www.instagram.com/oriana.angelucci/?hl=en), 
-    I decided to take on this challenge for **the last 100 days of 2024**. 
+    I decided to take on this challenge for **the last 100 days of 2024** (23/09/24–31/12/24). 
     
     *“This challenge is about training your perception on things. 
     Scanning your environment for positive things quickly creates a virtuous circle by adding a positive outlook
@@ -50,6 +51,9 @@ st.markdown("""
     Day by day, I’ve learned how this practice of appreciating little things can deeply shape the way we move through life
     —turning it into a mindful act of creating joy and embracing the beauty of uncertainty.
     """)
+st.markdown("""
+    You can click the images below👇 to see the full-size version and details in the sidebar 👈. 
+""")
 
 # cols = st.columns(5)
 # https://github.com/wjbmattingly/youtube-streamlit-image-grid/blob/main/Home.py
@@ -165,38 +169,45 @@ st.sidebar.markdown("""
         />
         """, unsafe_allow_html=True)
 
-df_places = df[['place', 'tag']].value_counts().reset_index()
 color_dict = {
     'Family, home': '#ffd86d',  # family_square color
     'Friends, love, community': '#e45761',  # friends_square color  
     'Outdoors, flowers, nature': '#59b257',  # nature_square color
-    'Dataviz, work, learning': '#6cc4c7',  # dataviz_square color (assuming personal_square)
+    'Dataviz, work, learning': '#2f5e92',  # dataviz_square color (assuming personal_square)
     'Self-care, various': '#6cc4c7'  # personal_square color
 }
-# Sorting
+
+# Data prep and sorting
+df_places = df[['place', 'tag']].value_counts().reset_index(name='count')
 totals = df_places.groupby('place')['count'].sum().sort_values(ascending=False)
 sorted_places = totals.index.tolist() 
-# Chart
-fig = px.bar(
-    df_places, 
-    y='place', 
-    x='count', 
-    color='tag',
-    color_discrete_map=color_dict,
-    category_orders={'place': sorted_places},
-    barmode='stack'
-    )
-fig.update_layout(
-   title="",
-   yaxis_title="",
-   xaxis_title="",
-   margin=dict(l=5, r=5, t=5, b=5),  # Smaller margins
-   font=dict(size=12),
-   showlegend=False,
-   height=250,  # Compact height
-)
-st.sidebar.subheader("In how many different cities have I been in the last 100 days of the year, and for how many days?")
-st.sidebar.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
+sorted_places = sorted_places[::-1]
+pivot_df = df_places.pivot_table(
+    index='place', columns='tag', values='count', aggfunc='sum', fill_value=0
+).loc[sorted_places]
+
+# Plot
+fig, ax = plt.subplots(figsize=(4, 4))  # small size for sidebar
+bottom = None
+for tag, color in color_dict.items():
+    if tag in pivot_df.columns:
+        ax.barh(pivot_df.index, pivot_df[tag], 
+                left=bottom, label=tag, color=color, alpha=0.8)
+        bottom = pivot_df[tag] if bottom is None else bottom + pivot_df[tag]
+# Styling
+ax.grid(axis='x', linestyle='--', alpha=0.7)
+ax.set_xlabel("Days")
+ax.set_ylabel("")
+ax.set_title("")
+ax.legend().set_visible(False)
+plt.tight_layout()
+for item in [fig, ax]:
+    item.patch.set_visible(False)
+for spine in ax.spines.values():
+    spine.set_visible(False)
+# Show in sidebar
+st.sidebar.subheader("In which cities have I been in the last 100 days of the year, and for how long?")
+st.sidebar.pyplot(fig, dpi=1000, use_container_width=True)
 
 st.sidebar.markdown("""<hr style="height:2px; border:none; color:#333; background-color:#333;"/>""", unsafe_allow_html=True)
 st.sidebar.subheader('📙 References')

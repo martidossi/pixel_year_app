@@ -8,7 +8,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from utils import local_css
-from annotated_text import annotation
+# from annotated_text import annotation
 from itertools import product
 import plotly.express as px
 from pywaffle import Waffle
@@ -25,7 +25,7 @@ st.set_page_config(
     layout="wide"
 )
 # st.image("pics/cover.png")
-# set_bg_hack('pics/cover_v.png')
+#set_bg_hack('pics/cover_v.png')
 
 sys.path.insert(0, "..")
 local_css("style.css")
@@ -33,7 +33,7 @@ local_css("style.css")
 st.sidebar.subheader('🔍 How to read')
 
 st.sidebar.markdown("""
-    **Color legend** | Below are the colors used in the visualizations, which are based on the
+    **Color legend** – Below are the colors used in the visualizations, which are based on the
     **emotion wheel** developed by [Human Systems](https://humansystems.co/emotionwheels/).
     """)
 st.sidebar.markdown("""
@@ -108,20 +108,30 @@ st.header('Hello! 🌞')
 #st.markdown("### " + text_1 + str(annotation(" personal data", "", "#fea"))
 #            + text_2, unsafe_allow_html=True)
 
-st.subheader('This is my 2024 personal data collection.')
+st.subheader('Welcome to my 2024 personal data collection & visualization.')
+st.markdown("""
+    All through 2024, I collected tiny bits of data each day, using a simple form I set up at the start 
+    of the year. What started as a five-minute daily experiment in self-reflection slowly turned into a
+    habit I didn’t want to skip.
+    Now, with a year’s worth of little traces behind me, I’m excited to dig
+    in and see the patterns that may have quietly unfolded along the way. ✨
+    """)  
+
 col1, col2 = st.columns([1, 1], gap='large')
 with col1:
-    st.markdown("""
-            Throughout 2024, I collected small bits of data each day, guided by a form I put together at the start of the year.
-            What began as a personal experiment in self-understanding and reflection —just five minutes a day to stay present 
-            with myself— slowly grew into a steady habit I’m truly glad I maintained. 
-            Now, with a year’s worth of traces behind me, I’m excited to dive in and uncover the patterns that may have quietly taken shape.
-            """)
+    with st.container(border=True):
+        st.markdown("""
+            #### ⚠️ Heads up! 👀
+            - For full functionality, please view this on a desktop –some features might look a bit off on mobile.
+            - Keep in mind: the sidebar on the left is often part of the visualizations.        
+        """)
 with col2:
-    st.markdown('*Dive into the other pages to explore more:*')
+    st.markdown('#### Check out the other pages for the full story:')
     st.page_link("pages/1_💫_Everything.py", label="Everything", icon="💫")
     st.page_link("pages/2_🌈100_Happy_Days_challenge.py", label="100 Happy Days challenge", icon="🌈")
     st.page_link("pages/3_📌Notes.py", label="Notes", icon="📌")
+
+st.markdown("""<hr style="height:1px; border:none; color:#333; background-color:#333;"/>""", unsafe_allow_html=True)
 
 # st.markdown("<h3>" + text + str(annotation("apple", "", "#fea")) + "</h3>", unsafe_allow_html=True)
 # st.write(st.secrets['connections'])
