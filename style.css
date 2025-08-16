@@ -9,8 +9,10 @@
         font-size: 12px;
         }
 .rounded-image {
-        border-radius: 10px;
-        # border: 5px solid;
+        border-radius: 0px;
+        border: 2px solid;
+        border-color: white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
     }
 .bold {
   padding-left: 1rem;
@@ -79,49 +81,65 @@
     display: inline-block;
 }
 
+.happy_circle_n {
+    height: 15px;
+    width: 15px;
+    background-color: #f7add6;
+    display: inline-block;
+    border-radius: 50%;  /* Makes it round */
+}
+
+.happy_circle_m {
+    height: 22px;
+    width: 22px;
+    background-color: #f7add6;
+    display: inline-block;
+    border-radius: 50%;  /* Makes it round */
+}
+
+.happy_circle_h {
+    height: 30px;
+    width: 30px;
+    background-color: #f7add6;
+    display: inline-block;
+    border-radius: 50%;  /* Makes it round */
+}
+
 .friends_square {
     height: 12px;
     width: 12px;
-    background-color: #ffcc66;
+    background-color: #e45761;
     display: inline-block;
 }
 
 .family_square {
     height: 12px;
     width: 12px;
-    background-color: #33cccc;
+    background-color: #ffd86d;
     display: inline-block;
 }
 
-.flowers_square {
+.nature_square {
     height: 12px;
     width: 12px;
-    background-color: #339933;
+    background-color: #59b257;
     display: inline-block;
 }
 
-.food_square {
+.personal_square {
     height: 12px;
     width: 12px;
-    background-color: #ff3366;
+    background-color: #6cc4c7;
     display: inline-block;
 }
 
 .dataviz_square {
     height: 12px;
     width: 12px;
-    background-color: #333399;
+    background-color: #2f5e92;
     display: inline-block;
 }
 
-.other_square {
-    height: 12px;
-    width: 12px;
-    background-color: #ffffff;
-    display: inline-block;
-    display: inline-block;
-    border: 1px solid #000000; /* Black border with 2px thickness */
-}
 
 
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap'); 

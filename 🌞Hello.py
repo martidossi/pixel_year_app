@@ -1,21 +1,21 @@
 import sys
+
+import streamlit as st
 from streamlit_gsheets import GSheetsConnection
-# import base64
 import yaml
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-from utils import *
+from utils import local_css
 from annotated_text import annotation
 from itertools import product
 import plotly.express as px
-import plotly.graph_objects as go
 from pywaffle import Waffle
 import datetime
 from time import strptime
 
-# dataviz custom plots
+# Custom plots
 from viz_functions import days_emotion_chart
 
 ## Setting
@@ -30,9 +30,10 @@ st.set_page_config(
 sys.path.insert(0, "..")
 local_css("style.css")
 
-st.sidebar.subheader('HOW TO READ: color legend')
+st.sidebar.subheader('🔍 How to read')
+
 st.sidebar.markdown("""
-    The colors below are those used in the *pixel-year-related* visualizations and are based on the
+    **Color legend** | Below are the colors used in the visualizations, which are based on the
     **emotion wheel** developed by [Human Systems](https://humansystems.co/emotionwheels/).
     """)
 st.sidebar.markdown("""
@@ -54,20 +55,20 @@ st.sidebar.markdown("""<hr style="height:2px; border:none; color:#333; backgroun
 st.sidebar.subheader('🌸 About me')
 # st.sidebar.image("pics/profile_pic.png", width=250)
 st.sidebar.markdown("""
-    My name is Martina and I am currently based in Italy, where I work as data scientist.
-    I'm a statistician by background and, over the past years, I developed a strong interest in information design and data visualization. 
-    To know more about me, check out my [personal page](https://martina-dossi.notion.site/Hi-I-m-Martina-6c1e9636b59245cd8cfedc1fffd05a1b).
+    My name is Martina, I'm from Italy and currently based in Utrecht (NL). After studying statistics and working as data scientist
+    for 5+ years, I am pursuing a PhD in Information and Computing Sciences at the University of Utrecht, as part of the 
+    [VIG group](https://www.projects.science.uu.nl/ics-vig/Main/HomePage) (to know more about my research project: [VR4eVR](https://vr4evr.nl/)).
     """)
 st.sidebar.subheader('💌 Contacts')
 st.sidebar.markdown("""
     If you have any questions, feedback of any kind, I'd be delighted to connect.
     Feel free to reach out to me!
     - martinadossi.hello at gmail.com
-    - [LinkedIn](https://www.linkedin.com/in/martina-dossi/), [Instagram](https://www.instagram.com/adatastory_/), [Behance](https://www.behance.net/martinadossi)
+    - [Personal website](https://martina-dossi.notion.site/Hi-I-m-Martina-6c1e9636b59245cd8cfedc1fffd05a1b),
+    [LinkedIn](https://www.linkedin.com/in/martina-dossi/), [Instagram](https://www.instagram.com/adatastory_/), [Behance](https://www.behance.net/martinadossi)
     """)
 
 st.sidebar.markdown("""<hr style="height:2px; border:none; color:#333; background-color:#333;"/>""", unsafe_allow_html=True)
-
 st.sidebar.subheader('📙 References')
 st.sidebar.markdown("""
     *«Data collected from life can be a snapshot of the world
@@ -81,15 +82,47 @@ st.sidebar.markdown("""
     - [Celebrating Daily Joys](https://public.tableau.com/app/profile/qingyue.li8346/viz/CelebratingDailyJoysFindingLoveinEverydayLifeIronviz2024_Qingyue/Dashboard1), Qingyue Li.
     """
     )
+st.sidebar.image("pics/feelings.jpeg")
+st.sidebar.caption("Mansi Jikadara B [@thetypewriterdaily](https://www.instagram.com/thetypewriterdaily/)")
 st.sidebar.subheader("Made with 🫶 in Streamlit.")
 st.sidebar.markdown(
     "[![Made with Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://streamlit.io)"
 )
 
-text_1 = "🌞 Ciao! Welcome to my 2024 "
+st.markdown(
+    """
+    <style>
+    .big-font {
+        font-size: 100px !important;
+
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+#st.markdown("<p class='big-font'>😊</p>", unsafe_allow_html=True)
+
+text_1 = "This is my 2024 "
 text_2 = " collection."
-st.markdown("### " + text_1 + str(annotation(" personal data", "", "#fea"))
-            + text_2, unsafe_allow_html=True)
+st.header('Hello! 🌞')
+#st.markdown("### " + text_1 + str(annotation(" personal data", "", "#fea"))
+#            + text_2, unsafe_allow_html=True)
+
+st.subheader('This is my 2024 personal data collection.')
+col1, col2 = st.columns([1, 1], gap='large')
+with col1:
+    st.markdown("""
+            Throughout 2024, I collected small bits of data each day, guided by a form I put together at the start of the year.
+            What began as a personal experiment in self-understanding and reflection —just five minutes a day to stay present 
+            with myself— slowly grew into a steady habit I’m truly glad I maintained. 
+            Now, with a year’s worth of traces behind me, I’m excited to dive in and uncover the patterns that may have quietly taken shape.
+            """)
+with col2:
+    st.markdown('*Dive into the other pages to explore more:*')
+    st.page_link("pages/1_💫_Everything.py", label="Everything", icon="💫")
+    st.page_link("pages/2_🌈100_Happy_Days_challenge.py", label="100 Happy Days challenge", icon="🌈")
+    st.page_link("pages/3_📌Notes.py", label="Notes", icon="📌")
+
 # st.markdown("<h3>" + text + str(annotation("apple", "", "#fea")) + "</h3>", unsafe_allow_html=True)
 # st.write(st.secrets['connections'])
 # import streamlit.components.v1 as components
@@ -117,6 +150,13 @@ dict_emotion_id = cfg['map_emotion_id']
 dict_emotion_color = cfg['map_emotion_color']
 config_modebar = {'displayModeBar': False}
 
+# Movies & journaling
+df_movies = load_data("journaling_movies", 3, 45)
+st.session_state.df_movies = df_movies
+
+df_place = load_data("where_i_am", 13, 31)
+st.session_state.df_place = df_place
+
 # Emotion df
 df_emotion = load_data("pixel_year", 13, 31)
 df_emotion = (
@@ -125,6 +165,8 @@ df_emotion = (
     .set_index('id_day')
     .fillna('0')
 )
+st.session_state.df_emotion = df_emotion
+
 month_list = list(df_emotion.columns)
 emotion_list = list(dict_emotion_color.keys())[2:]
 positive_emotion_list = emotion_list[:4]
@@ -138,6 +180,7 @@ df_intensity = (
     .set_index('id_day')
     .fillna('0')
 )
+st.session_state.df_intensity = df_intensity
 
 # Mapping emotions to numbers
 df_emotion_id = (
@@ -146,6 +189,8 @@ df_emotion_id = (
     .fillna(0)
     .astype(int)
 )
+st.session_state.df_emotion_id = df_emotion_id
+
 # Title
 st.markdown("# A Year in :rainbow[Pixel]")
 
@@ -344,9 +389,9 @@ st.markdown("""<hr style="height:1px; border:none; color:#333; background-color:
 st.subheader('Trend over time')
 st.markdown("""
 How have I been feeling over time?
-This chart shows how my emotions have changed month by month, counting the days I felt each one.
-Surprisingly, even though I'm a winter person, it looks like I really enjoyed the summer months,
-especially July —which turned out to be the happiest month!
+This chart shows how my emotions have changed month by month, tracking the number of days I experienced each one.
+I was surprised to see how happy I felt during the summer months, even though I usually feel most at ease during
+winter and cold weather (here, other hidden factors played a major role).
 """)
 col1, _ = st.columns([2, 1])
 with col1:
@@ -392,10 +437,10 @@ st.markdown("""
     For different reasons, I like both of them, although they work quite differently
     (which one do you think works better?).
 """)
-# st.dataframe(df_month_emotion)
+
 col1, _ = st.columns([2, 1])
 with col1:
-    tab1, tab2 = st.tabs(["Stacked bar chart", "Radial stacked bar chart"])
+    tab1, tab2, tab3 = st.tabs(["Stacked bar chart", "Radial stacked bar chart", "Thoughts"])
     with tab1:
         fig = px.bar(
             df_month_emotion,
@@ -425,7 +470,7 @@ with col1:
         st.plotly_chart(fig, config=config_modebar)
     with tab2:
         hole_val = st.slider(
-            "How much changing the size of the inner circle affect the proportion of the colored areas?",
+            "Explore how much changing the size of the inner circle affect the proportion of the colored areas. 👇",
             min_value=0.0, max_value=1.0, value=0.0
         )
         fig = px.bar_polar(
@@ -466,20 +511,22 @@ with col1:
             fig.update_polars(radialaxis_showticklabels=False)
         st.plotly_chart(fig, config=config_modebar)
 
-    col1, col2 = st.columns(2)
-    with col1:
-        st.markdown("""
-            - The bar chart is very effective in providing a complete picture of the data,
-            despite the challenge of comparing internal values that do not share a common baseline.
+    with tab3:
+        col1, col2 = st.columns(2)
+        with col1:
+            st.markdown("""
+                - The bar chart is very effective in providing a complete picture of the data,
+                despite the challenge of comparing internal values that do not share a common baseline.
+                   """)
+        with col2:
+            st.markdown("""
+                - The radial chart is aesthetically more pleasing and interesting
+                ([why do we find circles so beautiful?](https://www.sciencefocus.com/science/why-do-we-find-circles-so-beautiful)).
+                This said, it distorts reality: by construction, the inner groups are never well represented, which makes
+                the whole data look skewed (more about this
+                [here](https://www.data-to-viz.com/caveat/circular_bar_yaxis.html)).
                """)
-    with col2:
-        st.markdown("""
-            - The radial chart is aesthetically more pleasing and interesting
-            ([why do we find circles so beautiful?](https://www.sciencefocus.com/science/why-do-we-find-circles-so-beautiful)).
-            This said, it distorts reality: by construction, the inner groups are never well represented, which makes
-            the whole data look skewed (more about this
-            [here](https://www.data-to-viz.com/caveat/circular_bar_yaxis.html)).
-           """)
+        st.markdown("#")
 
 ######## days viz
 days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
@@ -538,50 +585,4 @@ with col1:
             days_emotion_chart(
                 df_days_counts, perc_feature='perc_emotion', days_list=days, emotions_list=list(dict_emotion_id_2.keys()), config_modebar=config_modebar
             )
-
-st.markdown("##### Ranking by month")
-col1, _ = st.columns([3, 1])
-with col1:
-    st.markdown("""
-        In these visualizations, the focus shifts to the monthly trend of each emotion.
-        By default, data are ranked by month. The button below allows to switch the visualizations to sort 
-        by percentage values.
-        """)
-    sorting_criteria = 'month'
-    on = st.toggle("Sort each series by prevailing emotion (🧘this can take a while)")
-    if on:
-        sorting_criteria = 'emotion'
-    fig, ax = plt.subplots(3, 2, figsize=(15, 16))
-    ax = ax.flatten()
-    emotions = [
-        'Happy',
-        'Loved',
-        'Confident',
-        'Playful',
-        'Scared',
-        'Sad'
-    ]
-    sorted_month = list(df_emotion.columns)
-    sorted_month.reverse()
-    for i, emotion in enumerate(emotions):
-        df_filt = df_melt[df_melt.emotion == emotion]
-        if sorting_criteria == 'month':
-            df_plot = (df_filt.month.value_counts() / df_filt.shape[0]).reindex(sorted_month).fillna(0).reset_index()
-            df_plot.columns = ['month', 'count']
-        if sorting_criteria == 'emotion':
-            df_plot = (df_filt.month.value_counts() / df_filt.shape[0]).reindex(sorted_month).fillna(
-                0).reset_index()
-            df_plot.columns = ['month', 'count']
-            df_plot = df_plot.sort_values(by='count')
-        range_plot = range(1, 1 + df_plot.shape[0])
-        ax[i].hlines(y=range_plot, xmin=0, xmax=df_plot['count'], color=dict_emotion_color[emotion])
-        ax[i].plot(df_plot['count'], range_plot, "o", color=dict_emotion_color[emotion])
-        ax[i].set_yticks(range(1, 1 + df_plot.shape[0]), df_plot['month'])
-        ax[i].set_xlabel(f'Percentage of "{emotion.lower()}" days')
-        ax[i].spines['top'].set_visible(False)
-        ax[i].spines['right'].set_visible(False)
-        ax[i].grid(axis='x', ls=':')
-        vals = ax[i].get_xticks()[1:-1]
-        ax[i].set_xticks(vals, ['{:,.0%}'.format(x) for x in vals])
-    st.pyplot(fig, dpi=500, use_container_width=True)
 
