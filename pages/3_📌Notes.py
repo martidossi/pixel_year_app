@@ -1,15 +1,19 @@
 import streamlit as st
 import time
 import sys
-from utils import *
+from utils import local_css
 
 sys.path.insert(0, "..")
 local_css("style.css")
 
+
 st.sidebar.markdown("""
-    # If there's something this year has taught me, it's to appreciate the detours; to enjoy the weird pit stops; to collect unexpected memories.
+    <span style="font-size:13px; font-style:italic;">If there's something this year has taught me, 
+    it's to appreciate the detours; to enjoy the weird pit stops; to collect unexpected memories. 
     Anne-Laure Le Cunff.
-    """)
+""", unsafe_allow_html=True)
+
+
 if st.sidebar.button('Three cheers'):
     st.toast('Hip!')
     time.sleep(.5)
@@ -18,7 +22,7 @@ if st.sidebar.button('Three cheers'):
     st.toast('Hooray!', icon='🎉')
 # st.sidebar.image("pics/feelings.jpeg", width=250)
 
-st.markdown("# Considerations")
+st.markdown("## Motivation")
 col1, col2 = st.columns(2, gap='large')
 with col1:
     st.markdown(
@@ -61,4 +65,13 @@ st.markdown(
 
 
 
+st.markdown("## Lessons learned")
+st.markdown("""
+    - the importance of tracking things consistently, even when it feels challenging;
+    - how categories and structure matter—and how I’d like to refine them for next year;
+    - that the exercise worked as a kind of personal journal, helping me revisit past moments and appreciate small joys (like in *100 Happy Days*);
+    - how tracking itself can shape behavior—for example, noticing patterns like watching many movies at the beginning and fewer later on
+""")
 
+
+st.markdown("## The process")

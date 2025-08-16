@@ -1,13 +1,13 @@
 import sys
 
-import streamlit
+import streamlit as st
 from streamlit_gsheets import GSheetsConnection
 import yaml
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-from utils import *
+from utils import local_css
 from annotated_text import annotation
 from itertools import product
 import plotly.express as px
@@ -15,7 +15,7 @@ from pywaffle import Waffle
 import datetime
 from time import strptime
 
-# dataviz custom plots
+# Custom plots
 from viz_functions import days_emotion_chart
 
 ## Setting
@@ -82,6 +82,8 @@ st.sidebar.markdown("""
     - [Celebrating Daily Joys](https://public.tableau.com/app/profile/qingyue.li8346/viz/CelebratingDailyJoysFindingLoveinEverydayLifeIronviz2024_Qingyue/Dashboard1), Qingyue Li.
     """
     )
+st.sidebar.image("pics/feelings.jpeg")
+st.sidebar.caption("Mansi Jikadara B [@thetypewriterdaily](https://www.instagram.com/thetypewriterdaily/)")
 st.sidebar.subheader("Made with 🫶 in Streamlit.")
 st.sidebar.markdown(
     "[![Made with Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://streamlit.io)"
