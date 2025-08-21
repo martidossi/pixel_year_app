@@ -1,8 +1,63 @@
 import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
 import plotly.graph_objects as go
 import streamlit as st
 from typing import List, Dict
 
+
+def pixels_chart(
+          df_emotion: pd.DataFrame,
+          df_intensity: pd.DataFrame = None,
+          color_dictionary: Dict[str, str] = None
+) -> st.plotly_chart:
+
+    """
+    Display a heatmap of daily emotions (and optionally intensities) as a pixel chart using seaborn.
+
+    Args:
+        df_emotion (pd.DataFrame): DataFrame of emotion codes (numeric or categorical), indexed by day, columns as months.
+        df_intensity (pd.DataFrame, optional): DataFrame of emotion intensities, same shape as df_emotion. If provided, values are annotated on the heatmap.
+        color_dictionary (Dict[str, str], optional): Dictionary mapping emotion names or codes to color hex values. Used for the heatmap colormap.
+
+    Returns:
+        st.plotly_chart: The rendered Streamlit chart object (actually a matplotlib heatmap rendered via st.pyplot).
+    """
+    fig, ax = plt.subplots(figsize=(10, 10))
+    annot = None
+    if df_intensity is not None:
+        annot = (
+            df_intensity.transpose()
+            .replace('0', '')
+            .replace('Missing', '')
+            .replace(':|', '')
+        )
+    ax = sns.heatmap(
+        df_emotion.transpose(),
+        cmap=list(color_dictionary.values()),
+        cbar=False,
+        linewidths=1.4,
+        linecolor='white',
+        square=True,
+        vmin=0,
+        vmax=len(color_dictionary),
+        xticklabels=1,
+        annot=annot,
+        fmt='',
+        ax=ax
+    )
+    ax.set_yticklabels(
+        labels=['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'],
+        rotation=0, fontsize=8
+    )
+    ax.set_xticklabels(labels=list(df_emotion.index), rotation=0, fontsize=8)
+    ax.set_xlabel('')
+    ax.tick_params(axis='x', colors="#444")
+    ax.tick_params(axis='y', colors="#444")
+    # Hide figure background
+    for item in [fig, ax]:
+        item.patch.set_visible(False)
+    return st.pyplot(fig, dpi=1000, use_container_width=True)
 
 def days_emotion_chart(
         df_days_counts: pd.DataFrame,
@@ -12,14 +67,14 @@ def days_emotion_chart(
         config_modebar: Dict[str, bool]
 ) -> st.plotly_chart:
     """
-    Creates a scatter plot that visualizes the distribution of emotions across different weekdays.
+    Creates a scatter plot that visualizes the distribution of emotions across different weekdays using plotly.
 
     This function uses Plotly to generate a chart where each marker represents a specific combination
     of emotion and weekday. The size of each marker is determined by the percentage feature from the
     provided DataFrame. The plot is customized for clarity and ease of interpretation, with specific
     focus on the relative frequency of emotions.
 
-    Parameters:
+    Args:
         df_days_counts (pd.DataFrame): A DataFrame containing the following columns:
             - `weekday`: The day of the week (e.g., Monday, Tuesday, etc.).
             - `emotion`: The emotion corresponding to each day (e.g., Happy, Sad).

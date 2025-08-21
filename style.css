@@ -140,67 +140,34 @@
     display: inline-block;
 }
 
-/* Weekend day - Yellow circle with white center (donut) */
-.weekend-circle {
+.intensity-small {
+    width: 11px;
+    height: 11px;
+    border: 1px solid black;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+.intensity-medium {
     width: 16px;
     height: 16px;
-    background-color: #ffff00;
+    border: 1px solid black;
     border-radius: 50%;
-    border: 4px solid #ffff00;
-    box-sizing: border-box;
-    position: relative;
     display: inline-block;
     margin-right: 8px;
     vertical-align: middle;
 }
 
-.weekend-circle::after {
-    content: '';
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    width: 8px;
-    height: 8px;
-    background-color: white;
+.intensity-large {
+    width: 22px;
+    height: 22px;
+    border: 1px solid black;
     border-radius: 50%;
-}
-
-/* Watched a movie - Black octagon outline */
-.octagon {
-  width: 50px;
-  height: 50px;
-  background-color: transparent;
-  border: 1px solid black;  
-  clip-path: polygon(
-    30% 0%, 70% 0%, 
-    100% 30%, 100% 70%, 
-    70% 100%, 30% 100%, 
-    0% 70%, 0% 30%
-  );
-}
-
-/* Journaling - Diamond with four points (star shape) */
-.journaling-star {
-    width: 50px;
-    height: 16px;
-    background-color: #000000;
-    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
     display: inline-block;
     margin-right: 8px;
     vertical-align: middle;
-}
-
-/* Out of Milan - Diagonal line */
-.out-milan-line {
-    width: 16px;
-    height: 2px;
-    background-color: #000000;
-    transform: rotate(45deg);
-    display: inline-block;
-    margin-right: 8px;
-    vertical-align: middle;
-    margin-left: 4px;
-    margin-right: 12px;
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap'); 
@@ -211,4 +178,3 @@ html, body, [class*="css"] {
     font-weight: 400;
     color: #091747;
 }
-

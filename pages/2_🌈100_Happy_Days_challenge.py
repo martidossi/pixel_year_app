@@ -22,7 +22,7 @@ from utils import local_css, sort_images_by_number
 # Loads and applies style.css
 local_css("style.css")
 
-# Configuration constants
+# CONFIG
 PAGE_TITLE = "🌈 100 Happy Days challenge"
 WORKSHEET_NAME = "100happydays"
 N_COLS = 6
@@ -114,7 +114,7 @@ image_id = clickable_images(
 
 legend_mapping = {
     'family_square': 'Family, home',
-    'friends_square': 'Friends, love, community',
+    'friends_square': 'Friends, partner, community',
     'nature_square': 'Outdoors, flowers, nature',
     'dataviz_square': 'Dataviz, work, learning',
     'personal_square': 'Self-care, various'
@@ -127,25 +127,25 @@ st.sidebar.markdown("""
      – Below is the full list of categories and corresponding colors used to classify images.
     """)
 
-#### SIDEBAR 
+#### SIDEBAR –START
 
 # Legend on the sidebar
 st.sidebar.markdown("""
     <span class='family_square'></span> Family, home <br>
-    <span class='friends_square'></span> Friends, love, community <br>
+    <span class='friends_square'></span> Friends, partner, community <br>
     <span class='nature_square'></span> Outdoors, flowers, nature <br>
     <span class='dataviz_square'></span> Dataviz, work, learning <br>
     <span class='personal_square'></span> Self-care, various <br>
     """, unsafe_allow_html=True
 )
-
 st.sidebar.markdown("""<hr style="height:2px; border:none; color:#333; background-color:#333;"/>""", unsafe_allow_html=True)
 
 # Display the image on the sidebarwith the custom class and details in the sidebar
-st.sidebar.subheader(f'📸 Selected pic #{image_id+1}')
-if image_id == -1:
+if image_id < 0:
+    st.sidebar.subheader('📸 Select an image')
     st.sidebar.markdown("No image selected.")
 else:
+    st.sidebar.subheader(f'📸 Selected pic #{image_id+1}')
     # Display image with rounded borders using custom CSS
     st.sidebar.markdown(f'<img src="{images[image_id]}" class="rounded-image" width="200"/>', unsafe_allow_html=True)
     image_tag = df.loc[image_id, 'tag']
@@ -153,6 +153,7 @@ else:
         <br>
         <p style="display:inline; vertical-align:middle;">
             <span class='{inverse_legend_mapping[image_tag]}' style="display:inline-block; vertical-align:middle;"></span>
+            <span class="consolas-font" style="font-weight: bold;">tag: </span>
             <span class="consolas-font">{image_tag.capitalize()}</span>
         </p>
         <br>
@@ -171,7 +172,7 @@ st.sidebar.markdown("""
 
 color_dict = {
     'Family, home': '#ffd86d',  # family_square color
-    'Friends, love, community': '#e45761',  # friends_square color  
+    'Friends, partner, community': '#e45761',  # friends_square color  
     'Outdoors, flowers, nature': '#59b257',  # nature_square color
     'Dataviz, work, learning': '#2f5e92',  # dataviz_square color (assuming personal_square)
     'Self-care, various': '#6cc4c7'  # personal_square color
@@ -187,18 +188,23 @@ pivot_df = df_places.pivot_table(
 ).loc[sorted_places]
 
 # Plot
-fig, ax = plt.subplots(figsize=(4, 4))  # small size for sidebar
+fig, ax = plt.subplots(figsize=(4, 3.5))  # small size for sidebar
 bottom = None
 for tag, color in color_dict.items():
     if tag in pivot_df.columns:
-        ax.barh(pivot_df.index, pivot_df[tag], 
-                left=bottom, label=tag, color=color, alpha=0.8)
+        bars = ax.barh(pivot_df.index, pivot_df[tag], height=0.6,
+                left=bottom, label=tag, color=color, alpha=0.8,
+                edgecolor='white', linewidth=0.5)
         bottom = pivot_df[tag] if bottom is None else bottom + pivot_df[tag]
+        for bar in bars:
+            bar.set_capstyle('round')
 # Styling
 ax.grid(axis='x', linestyle='--', alpha=0.7)
-ax.set_xlabel("Days")
+ax.set_xlabel("Days", fontsize=12, color="#444")
 ax.set_ylabel("")
 ax.set_title("")
+ax.tick_params(axis='x', labelsize=12, color="#444")
+ax.tick_params(axis='y', labelsize=12, color="#444")
 ax.legend().set_visible(False)
 plt.tight_layout()
 for item in [fig, ax]:
@@ -206,14 +212,14 @@ for item in [fig, ax]:
 for spine in ax.spines.values():
     spine.set_visible(False)
 # Show in sidebar
-st.sidebar.subheader("In which cities have I been in the last 100 days of the year, and for how long?")
+st.sidebar.subheader("Places I've been in the last 100 days of the year & number of days")
 st.sidebar.pyplot(fig, dpi=1000, use_container_width=True)
 
 st.sidebar.markdown("""<hr style="height:2px; border:none; color:#333; background-color:#333;"/>""", unsafe_allow_html=True)
 st.sidebar.subheader('📙 References')
 url_video = "https://www.youtube.com/watch?v=J4UtPDaR3cA"
 st.sidebar.video(url_video)
-st.sidebar.markdown("""[100 Happy Days](https://100happydays.com/), Dmitry Golubnichy.""")
+st.sidebar.caption("""Dmitry Golubnichy, [100 Happy Days](https://100happydays.com/)""")
 st.sidebar.subheader("""
     小確幸 «shōgakkō» Small but Certain Happinesses
 
@@ -224,10 +230,12 @@ st.sidebar.subheader("""
 """)
 st.sidebar.markdown("""
     <span style="font-size:13px; font-style:italic;">Life’s Little Instruction Book: 1137.
-    Be happy with what you have while working for what you want.
-    [Letterina](https://letterina.substack.com/).</span>
+    «Be happy with what you have while working for what you want.»
+    [Letterina](https://letterina.substack.com/)</span>
 """, unsafe_allow_html=True)
 st.sidebar.markdown("""
-    <span style="font-size:13px; font-style:italic;">Be content with what you have; rejoice in the way things are.
-    When you realize there is nothing lacking, the whole world belongs to you. Lao Tzu. [Zen Habits](https://zenhabits.net/perfect/).
+    <span style="font-size:13px; font-style:italic;">«Be content with what you have; rejoice in the way things are.
+    When you realize there is nothing lacking, the whole world belongs to you.» Lao Tzu, [Zen Habits](https://zenhabits.net/perfect/)</span>
 """, unsafe_allow_html=True)
+
+#### SIDEBAR -END

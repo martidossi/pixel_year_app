@@ -6,17 +6,16 @@ from utils import local_css
 sys.path.insert(0, "..")
 local_css("style.css")
 
-
+st.sidebar.subheader('📙 References')
 st.sidebar.image("pics/tree_barc.jpeg")
 st.sidebar.caption("06/07/2024, Barcelona")
-
 st.sidebar.markdown("""
-    <span style="font-size:13px; font-style:italic;">If there's something this year has taught me, 
-    it's to appreciate the detours; to enjoy the weird pit stops; to collect unexpected memories. 
-    Anne-Laure Le Cunff.
+    <span style="font-size:13px; font-style:italic;">«If there's something this year has taught me, 
+    it's to appreciate the detours; to enjoy the weird pit stops; to collect unexpected memories.»
+    Anne-Laure Le Cunff
 """, unsafe_allow_html=True)
 
-if st.sidebar.button('Three cheers'):
+if st.sidebar.button('Three cheers 🎈'):
     st.toast('Hip!')
     time.sleep(.5)
     st.toast('Hip!')
@@ -82,3 +81,25 @@ with col1:
     """)
 with col2:
     st.image("pics/process.png")
+
+
+with st.container():
+    with st.form("input_form"):
+        col1, col2 = st.columns([9, 1])
+
+        with col1:
+            st.text_input("Please enter what you want to tell me here: ")
+
+        with col2:
+            st.form_submit_button()
+
+with st.form("my_form"):
+    st.write("Inside the form")
+    slider_val = st.slider("Form slider")
+    checkbox_val = st.checkbox("Form checkbox")
+
+    # Every form must have a submit button.
+    submitted = st.form_submit_button("Submit")
+    if submitted:
+        st.write("slider", slider_val, "checkbox", checkbox_val)
+st.write("Outside the form")

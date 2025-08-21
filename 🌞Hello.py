@@ -1,22 +1,26 @@
-import sys
 
+# Standard library imports
+import sys
+import datetime
+from time import strptime
+from itertools import product
+
+# Third-party imports
 import streamlit as st
 from streamlit_gsheets import GSheetsConnection
 import yaml
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import seaborn as sns
-from utils import local_css
-# from annotated_text import annotation
-from itertools import product
 import plotly.express as px
 from pywaffle import Waffle
-import datetime
-from time import strptime
 
 # Custom plots
-from viz_functions import days_emotion_chart
+from viz_functions import pixels_chart, days_emotion_chart
+
+# Local imports
+from utils import local_css, blend_colors
+local_css("style.css")
 
 ## Setting
 st.set_page_config(
@@ -24,17 +28,16 @@ st.set_page_config(
     page_icon="🟧",
     layout="wide"
 )
+
 # st.image("pics/cover.png")
-#set_bg_hack('pics/cover_v.png')
+# set_bg_hack('pics/cover_v.png')
 
-sys.path.insert(0, "..")
-local_css("style.css")
-
+#### SIDEBAR -START
 st.sidebar.subheader('🔍 How to read')
 
 st.sidebar.markdown("""
     **Color legend** – Below are the colors used in the visualizations, which are based on the
-    **emotion wheel** developed by [Human Systems](https://humansystems.co/emotionwheels/).
+    **emotion wheel** developed by [Human Systems](https://humansystems.co/emotionwheels/)
     """)
 st.sidebar.markdown("""
     <span class='happy_square'></span> Happy <br>
@@ -48,7 +51,7 @@ st.sidebar.markdown("""
     """, unsafe_allow_html=True
 )
 
-with st.sidebar.expander("See the emotion wheel:"):
+with st.sidebar.expander("See the emotion wheel"):
     st.image("pics/emotion-wheel.png")# width=300)
 st.sidebar.markdown("""<hr style="height:2px; border:none; color:#333; background-color:#333;"/>""", unsafe_allow_html=True)
 
@@ -57,58 +60,68 @@ st.sidebar.subheader('🌸 About me')
 st.sidebar.markdown("""
     My name is Martina, I'm from Italy and currently based in Utrecht (NL). After studying statistics and working as data scientist
     for 5+ years, I am pursuing a PhD in Information and Computing Sciences at the University of Utrecht, as part of the 
-    [VIG group](https://www.projects.science.uu.nl/ics-vig/Main/HomePage) (to know more about my research project: [VR4eVR](https://vr4evr.nl/)).
+    [VIG group](https://www.projects.science.uu.nl/ics-vig/Main/HomePage). 
+    At the time of this project (2024), I was living and working in Milan (IT).
     """)
 st.sidebar.subheader('💌 Contacts')
 st.sidebar.markdown("""
     If you have any questions, feedback of any kind, I'd be delighted to connect.
     Feel free to reach out to me!
-    - martinadossi.hello at gmail.com
-    - [Personal website](https://martina-dossi.notion.site/Hi-I-m-Martina-6c1e9636b59245cd8cfedc1fffd05a1b),
-    [LinkedIn](https://www.linkedin.com/in/martina-dossi/), [Instagram](https://www.instagram.com/adatastory_/), [Behance](https://www.behance.net/martinadossi)
+""")
+with st.sidebar.expander("Contacts"):
+    st.markdown("""
+        - martinadossi.hello at gmail.com
+        - [Personal website](https://martina-dossi.notion.site/Hi-I-m-Martina-6c1e9636b59245cd8cfedc1fffd05a1b)
+        - [LinkedIn](https://www.linkedin.com/in/martina-dossi/)
+        - [Instagram](https://www.instagram.com/adatastory_/)
+        - [Behance](https://www.behance.net/martinadossi)
+        - [GitHub](https://github.com/martidossi)
     """)
+
 
 st.sidebar.markdown("""<hr style="height:2px; border:none; color:#333; background-color:#333;"/>""", unsafe_allow_html=True)
 st.sidebar.subheader('📙 References')
+# «»
+st.sidebar.image("pics/smalldata_bigdata_output.png")
 st.sidebar.markdown("""
-    *«Data collected from life can be a snapshot of the world
-    in the same way that a picture catches small moments in time.»*
-    """)
-st.sidebar.image("pics/smalldata_bigdata_output.png", width=250)
+    <span style="font-size:13px; font-style:italic;">«Data collected from life can be a snapshot of the world
+    in the same way that a picture catches small moments in time.» Giorgia Lupi</span>
+""", unsafe_allow_html=True)
 st.sidebar.markdown("""
-    - [Dear Data](https://www.dear-data.com/theproject), Giorgia Lupi and Stefanie Posavec.
-    - [Feltron personal annual reports](http://feltron.com/), Nicholas Felton.
-    - [Happy Coding blog](https://happycoding.io/blog/year-in-pixels-2019), Happy Coding Blog.
-    - [Celebrating Daily Joys](https://public.tableau.com/app/profile/qingyue.li8346/viz/CelebratingDailyJoysFindingLoveinEverydayLifeIronviz2024_Qingyue/Dashboard1), Qingyue Li.
+    - [Dear Data](https://www.dear-data.com/theproject), Giorgia Lupi and Stefanie Posavec
+    - [Feltron personal annual reports](http://feltron.com/), Nicholas Felton
+    - [Happy Coding blog](https://happycoding.io/blog/year-in-pixels-2019), Happy Coding Blog
+    - [Celebrating Daily Joys](https://public.tableau.com/app/profile/qingyue.li8346/viz/CelebratingDailyJoysFindingLoveinEverydayLifeIronviz2024_Qingyue/Dashboard1), Qingyue Li
     """
     )
 st.sidebar.image("pics/feelings.jpeg")
-st.sidebar.caption("Mansi Jikadara B [@thetypewriterdaily](https://www.instagram.com/thetypewriterdaily/)")
-st.sidebar.subheader("Made with 🫶 in Streamlit.")
+st.sidebar.caption("Mansi Jikadara B, [@thetypewriterdaily](https://www.instagram.com/thetypewriterdaily/)")
+st.sidebar.markdown("""<hr style="height:2px; border:none; color:#333; background-color:#333;"/>""", unsafe_allow_html=True)
+st.sidebar.subheader("Made with 🫶 in Streamlit")
 st.sidebar.markdown(
     "[![Made with Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://streamlit.io)"
 )
+
+#### SIDEBAR -END
 
 st.markdown(
     """
     <style>
     .big-font {
         font-size: 100px !important;
-
     }
     </style>
     """,
     unsafe_allow_html=True,
 )
-#st.markdown("<p class='big-font'>😊</p>", unsafe_allow_html=True)
+# st.markdown("<p class='big-font'>😊</p>", unsafe_allow_html=True)
 
-text_1 = "This is my 2024 "
-text_2 = " collection."
-st.header('Hello! 🌞')
-#st.markdown("### " + text_1 + str(annotation(" personal data", "", "#fea"))
-#            + text_2, unsafe_allow_html=True)
+# text_1 = "This is my 2024 "
+# text_2 = " collection."
+# st.markdown("### " + text_1 + str(annotation(" personal data", "", "#fea")) + text_2, unsafe_allow_html=True)
 
-st.subheader('Welcome to my 2024 personal data collection & visualization.')
+st.title('🌞 Hello')
+st.subheader('Welcome to my 2024 personal data collection & visualization')
 st.markdown("""
     All through 2024, I collected tiny bits of data each day, using a simple form I set up at the start 
     of the year. What started as a five-minute daily experiment in self-reflection slowly turned into a
@@ -121,10 +134,11 @@ col1, col2 = st.columns([1, 1], gap='large')
 with col1:
     with st.container(border=True):
         st.markdown("""
-            #### ⚠️ Heads up! 👀
-            - For full functionality, please view this on a desktop –some features might look a bit off on mobile.
-            - Keep in mind: the sidebar on the left is often part of the visualizations.        
-        """)
+            #### Heads up! 👀
+            💻 For full functionality, please view this on a desktop –some features might look a bit off on mobile. <br>
+            🖼️ Keep in mind that the sidebar on the left is often part of the visualizations. <br>
+            🐌 Give it a moment to warm up: wait for the main page to load before switching to the others.       
+        """, unsafe_allow_html=True)
 with col2:
     st.markdown('#### Check out the other pages for the full story:')
     st.page_link("pages/1_💫_Everything.py", label="Everything", icon="💫")
@@ -140,19 +154,26 @@ st.markdown("""<hr style="height:1px; border:none; color:#333; background-color:
 
 # st.markdown("""<hr style="height:1px; border:none; color:#333; background-color:#333;"/>""", unsafe_allow_html=True)
 
-# connection to g spreadsheet and data loading
+# Connection to g spreadsheet and data loading
 conn = st.connection("gsheets", type=GSheetsConnection)
-@st.cache_data
-def load_data(worksheet_name, n_cols, n_rows):
-    df = conn.read(
-        worksheet=worksheet_name,
-        ttl="10m",
-        usecols=range(n_cols),
-        nrows=n_rows
-    )
-    return df
 
-# config
+@st.cache_data
+def load_data(worksheet_name, n_cols, n_rows, cache_ttl):
+    try:
+        df = conn.read(
+            worksheet=worksheet_name,
+            ttl=cache_ttl,
+            usecols=range(n_cols),
+            nrows=n_rows
+        )
+        return df
+    except Exception as e:
+        st.error(f"Error loading data: {e}")
+        return None
+
+# CONFIG
+CACHE_TTL = "10m"
+
 with open("config.yml", 'r') as f:
     cfg = yaml.safe_load(f)
 
@@ -160,15 +181,18 @@ dict_emotion_id = cfg['map_emotion_id']
 dict_emotion_color = cfg['map_emotion_color']
 config_modebar = {'displayModeBar': False}
 
-# Movies & journaling
-df_movies = load_data("journaling_movies", 3, 45)
+# DF LOADING
+
+# Movies 
+df_movies = load_data(worksheet_name="movies", n_cols=10, n_rows=45, cache_ttl=CACHE_TTL)
 st.session_state.df_movies = df_movies
 
-df_place = load_data("where_i_am", 13, 31)
+# Places
+df_place = load_data(worksheet_name="where_i_am", n_cols=13, n_rows=31, cache_ttl=CACHE_TTL)
 st.session_state.df_place = df_place
 
 # Emotion df
-df_emotion = load_data("pixel_year", 13, 31)
+df_emotion = load_data(worksheet_name="pixel_year", n_cols=13, n_rows=31, cache_ttl=CACHE_TTL)
 df_emotion = (
     df_emotion
     .rename(columns={'day/month': 'id_day'})
@@ -183,7 +207,7 @@ positive_emotion_list = emotion_list[:4]
 negative_emotion_list = emotion_list[4:]
 
 # Emotion intensity
-df_intensity = load_data("pixel_year_intensity", 13, 31)
+df_intensity = load_data(worksheet_name="pixel_year_intensity", n_cols=13, n_rows=31, cache_ttl=CACHE_TTL)
 df_intensity = (
     df_intensity
     .rename(columns={'day/month': 'id_day'})
@@ -224,50 +248,17 @@ col1, _ = st.columns([4, 2], gap='large')
 with col1:
     tab1, tab2 = st.tabs(["Prevailing feeling", "Intensity"])
     with tab1:
-        fig, ax = plt.subplots(figsize=(10, 10))
-        ax = sns.heatmap(
-            df_emotion_id.transpose(),
-            cmap=list(dict_emotion_color.values()),
-            cbar=False,
-            linewidths=1.4,
-            linecolor='white',
-            square=True,
-            vmin=0,
-            vmax=len(dict_emotion_color),
-            xticklabels=1,
-            ax=ax
+        pixels_chart(
+            df_emotion=df_emotion_id,
+            color_dictionary=dict_emotion_color,
         )
-        ax.set_yticklabels(labels=['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'], rotation=0, fontsize=8)
-        ax.set_xticklabels(labels=list(df_emotion_id.index), rotation=0, fontsize=8)
-        ax.set_xlabel('')
-        for item in [fig, ax]:
-            item.patch.set_visible(False)
-        st.pyplot(fig, dpi=1000, use_container_width=True)
-        #st.markdown('#')
-
+        
     with tab2:
-        labels = df_intensity.transpose().replace('0', '').replace('Missing', '').replace(':|', '')
-        fig, ax = plt.subplots(figsize=(10, 10))
-        ax = sns.heatmap(
-            df_emotion_id.transpose(),
-            cmap=list(dict_emotion_color.values()),
-            cbar=False,
-            linewidths=1.4,
-            linecolor='white',
-            square=True,
-            vmin=0,
-            annot=labels,
-            fmt='',
-            vmax=len(dict_emotion_color),
-            xticklabels=1,
-            ax=ax
+        pixels_chart(
+            df_emotion=df_emotion_id,
+            df_intensity=df_intensity,
+            color_dictionary=dict_emotion_color,
         )
-        ax.set_yticklabels(labels=['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'], rotation=0, fontsize=8)
-        ax.set_xticklabels(labels=list(df_emotion_id.index), rotation=0, fontsize=8)
-        ax.set_xlabel('')
-        for item in [fig, ax]:
-            item.patch.set_visible(False)
-        st.pyplot(fig, dpi=1000, use_container_width=True)
 
 
 ##########################
@@ -296,9 +287,18 @@ df_month_emotion = df_month_emotion.drop(['value_x', 'value_y'], axis=1)
 st.markdown("""<hr style="height:1px; border:none; color:#333; background-color:#333;"/>""", unsafe_allow_html=True)
 st.subheader('How often have I experienced each feeling?')
 st.markdown("""
-    These visualizations offer two compact views to inspect the weight of each emotion over all observed days, 
-    grouped into positive and negative categories.
-    """)
+        These visualizations offer two compact views to inspect the weight of each emotion over all observed days, 
+        grouped into positive and negative categories.
+        """)
+col1, _ = st.columns([1, 2], gap='large')
+with col1:
+    with st.expander('Side note on what I mean by “happy”'):
+        st.info(
+            "When I mark a day as happy, I don’t mean it was full of euphoria or peak moments. "
+            "It’s more about the background tone of the day —a general sense of ease, calm, "
+            "or simply feeling okay. The real spikes, both joyful and difficult, are captured "
+            "separately with the smiley scale.", icon="ℹ️"
+        )
 df_n_days = df_month_emotion.groupby('emotion').agg({'value': sum}).reindex(emotion_list).reset_index()
 df_n_days_pos = df_n_days[df_n_days.emotion.isin(positive_emotion_list)]
 df_n_days_neg = df_n_days[df_n_days.emotion.isin(negative_emotion_list)]
@@ -337,13 +337,6 @@ with col1:
             icons=['sun', 'sun', 'sun', 'sun', 'cloud-showers-heavy', 'cloud-showers-heavy', 'cloud-showers-heavy',
                    'cloud-showers-heavy'],
             block_arranging_style='snake',
-            # legend={
-            #    'labels': [f"{k} ({v}%)" for k, v in waffle_dict.items()],
-            #   'loc': 'upper left',
-            #    'bbox_to_anchor': (1, 1),
-            #    'framealpha': 0,
-            #    'fontsize': 5,
-            # }
         )
         ax.get_legend().remove()
         for item in [fig, ax]:
@@ -384,25 +377,20 @@ with col2:
             fig.data[0].textinfo = 'label+text+percent entry'
             fig.data[0].hovertemplate = 'emotion=%{label}<br>number of days=%{value}'
             st.plotly_chart(fig, config=config_modebar, use_container_width=True)
-st.markdown("From the chart, it seems I've been *happy* most of the time. But what do I mean by *happy*?")
-st.markdown("""
-    These emotions reflect the predominant feeling that shaped the background of each day, rather than its intensity.
-    For intensity, I referred to the *smiley* scale (see the chart above), which captures peak moments,
-    both positive and negative. Therefore, happy days without an intensity marker are simply days when I felt *okay*,
-    with a general sense of calm and balance.
-    """)
+
 
 ####################
 
 # Trend over time
 st.markdown("""<hr style="height:1px; border:none; color:#333; background-color:#333;"/>""", unsafe_allow_html=True)
-st.subheader('Trend over time')
+st.subheader('How have my feelings changed over time?')
+st.markdown('##### 1. Single trends')
 st.markdown("""
-How have I been feeling over time?
-This chart shows how my emotions have changed month by month, tracking the number of days I experienced each one.
-I was surprised to see how happy I felt during the summer months, even though I usually feel most at ease during
-winter and cold weather (here, other hidden factors played a major role).
-""")
+    This chart shows how my emotions have changed month by month, counting the number of days I experienced each one. <br>
+    It is very easy to spot the months I felt the best ☀️🏖️ –and although August isn’t as happy as the previous months,
+    a feeling of confidence enters the picture to balance things out. 
+    It also reflects how I move through summer: after a few more carefree months, preparing for September means loading up on expectations, plans, and hopes –in a word, _being confident_. 🔮
+""", unsafe_allow_html=True)
 col1, _ = st.columns([2, 1])
 with col1:
     #sel_status = st.multiselect("Pick one or more emotions:", emotion_list, [])
@@ -435,18 +423,50 @@ with col1:
         yaxis_title="number of days",
         xaxis=dict(showgrid=False, tickcolor='black', color='black', linewidth=1, gridwidth=1, gridcolor='darkgray'),
         yaxis=dict(showgrid=True, tickcolor='black', color='black', linewidth=1, gridwidth=1, gridcolor='darkgray'),
-        margin=dict(t=20),
+        margin=dict(t=20, b=20),
         showlegend=False
     )
     st.plotly_chart(fig, config=config_modebar, dpi=1000, use_container_width=True)
 
-st.markdown("##### Visualizing totals")
+result_colors = []
+for month in month_list:
+    df_month_emotion_sel = df_month_emotion[df_month_emotion['month'] == month]
+    df_month_emotion_sel['value_perc'] = df_month_emotion_sel['value']/df_month_emotion_sel['value'].sum()
+    df_month_emotion_sel['emotion_color'] = df_month_emotion_sel['emotion'].map(dict_emotion_color)
+    colors = df_month_emotion_sel['emotion_color'].tolist()
+    weights = df_month_emotion_sel['value_perc'].tolist()
+    result_colors.append(blend_colors(colors, weights))
+
+# Visualize the 12 blended colors as a horizontal row of swatches (one per month)
+months_initials = ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D']
+col1, _ = st.columns([3.5, 1.5])
+with col1:
+    with st.expander('🪄Colors of the year: 12 months, 12 colors'):
+        help_message = "The representative color of each month is calculated by weighting the colors of each emotion proportionally in the RGB space, resulting in a blended hue that reflects the overall emotional composition of that month."
+        st.markdown("""
+            This visualization blends the colors of all emotions across the months of the year to create a unique palette.
+            Each square below represents a month, whose color captures the essence of its emotional spectrum.
+            The initials of the months are displayed below each square.
+            """, help=help_message, unsafe_allow_html=True)
+        squares_html = ""
+        for color, initial in zip(result_colors, months_initials):
+            squares_html += f"""
+            <div style='display:inline-block; text-align:center; margin:1; padding:1;'>
+                <div style='width:50px; height:50px; background-color:{color}; 
+                            border:1px solid white; border-radius:5px;'></div>
+                <div style='color:#444; font-size:12px;'>{initial}</div>
+            </div>
+            """
+        st.markdown(squares_html, unsafe_allow_html=True)
+
+st.markdown('<br>', unsafe_allow_html=True) 
+st.markdown("##### 2. Visualizing totals")
 st.markdown("""
-    These visualizations capture the emotional composition of each month by summing up all the emotions.
-    The two visual models, designed with identical data and purpose, are for comparison and experimentation.
-    For different reasons, I like both of them, although they work quite differently
-    (which one do you think works better?).
-""")
+    These visualizations show the emotional makeup of each month by summing up all the feelings. <br>
+    I’m presenting two visual models (a classical stacked bar chart and its radial version) using the same data and aiming for the same purpose 
+    —just to see what works best. I like both for different reasons, even though they work quite differently. 
+    Which one do you think works better? 💡 My own thoughts live in the “thoughts” bar.
+""", unsafe_allow_html=True)
 
 col1, _ = st.columns([2, 1])
 with col1:
@@ -475,14 +495,17 @@ with col1:
             yaxis=dict(showline=True, linewidth=1, linecolor='black', showgrid=False),
             margin=dict(t=20),
             bargap=0,
-            showlegend=False
+            showlegend=False,
+            barmode="relative"
         )
         st.plotly_chart(fig, config=config_modebar)
     with tab2:
-        hole_val = st.slider(
-            "Explore how much changing the size of the inner circle affect the proportion of the colored areas. 👇",
-            min_value=0.0, max_value=1.0, value=0.0
-        )
+        col1, _ = st.columns([2, 2], gap='large')
+        with col1:
+            hole_val = st.slider(
+                "How does the inner circle size affect the colored areas? 👇",
+                min_value=0.0, max_value=1.0, value=0.0
+            )
         fig = px.bar_polar(
             df_month_emotion,
             r="value",
@@ -490,6 +513,7 @@ with col1:
             color="emotion",
             color_discrete_map=dict_emotion_color
         )
+        fig.update_traces(marker_line_color="white", marker_line_width=0.5)
         fig.update_layout(
             font=dict(
                 family="IBM Plex Sans",
@@ -507,14 +531,14 @@ with col1:
                 radialaxis=dict(
                     gridcolor='lightgray',
                     griddash='dot',
-                    tickcolor='black',
-                    tickfont_color='black'
+                    tickcolor="#444",
+                    tickfont_color="#444"
                     ),
                 angularaxis=dict(
                     linecolor='black',
                     gridcolor='gray',
                 )
-            ),
+            )
         )
         if hole_val > 0.05:
             fig.update_polars(radialaxis_ticks="")
@@ -525,7 +549,7 @@ with col1:
         col1, col2 = st.columns(2)
         with col1:
             st.markdown("""
-                - The bar chart is very effective in providing a complete picture of the data,
+                - The vertical bar chart is very effective in providing a complete picture of the data,
                 despite the challenge of comparing internal values that do not share a common baseline.
                    """)
         with col2:
@@ -538,7 +562,7 @@ with col1:
                """)
         st.markdown("#")
 
-######## days viz
+# Days viz
 days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 # Dropped emotions that are not used
 dict_emotion_id_2 = {
@@ -570,16 +594,12 @@ df_days_counts['perc_emotion'] = df_days_counts['count']*100/df_days_counts['n_e
 df_days_counts['perc_weekday'] = df_days_counts['count']*100/df_days_counts['n_weekday']
 df_days_counts['emotion_color'] = df_days_counts.emotion.map(dict_emotion_color)
 
-st.markdown("##### Trend by weekday")
+st.markdown("##### 3. What's my fav day of the week?")
 st.markdown("""
-    What's my fav day of the week? 
-    The two charts below both show the trends of my emotional states day by day.
-    I’ve represented them twice, to get insights from different perspectives.
-    In the first chart, counts are normalized by day of the week, to show the percentages
-    of different emotions each day (with the sum for each day equaling 100%).
-    In the second, counts are normalized by emotion, to highlight the distribution of days on
-    which I felt each emotion (with the sum for each emotion also equaling 100%).
-    """)
+    The two charts below show the trends of my feelings day by day, but from different perspectives. <br>
+    1. In the first chart, counts are normalized by day of the week, showing the percentage of each emotion per day (so each day sums to 100%). <br>
+    2. In the second, counts are normalized by emotion, highlighting how each feeling was spread across days (so each emotion sums to 100%). <br>
+    """, unsafe_allow_html=True)
 col1, _ = st.columns([4, 1])
 with col1:
     col1, col2 = st.columns([1, 1])
@@ -595,4 +615,3 @@ with col1:
             days_emotion_chart(
                 df_days_counts, perc_feature='perc_emotion', days_list=days, emotions_list=list(dict_emotion_id_2.keys()), config_modebar=config_modebar
             )
-

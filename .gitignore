@@ -163,6 +163,7 @@ profile_pic.jpeg
 .streamlit
 .DS_Store
 pages/.DS_Store
+.streamlit/.DS_Store
 pics/.DS_Store
 project_100happydays
 notebooks/notes

@@ -3,7 +3,9 @@ import base64
 import re
 
 
-def local_css(file_name):
+def local_css(
+        file_name: str
+) -> None:
     try:
         with open(file_name) as f:
             st.markdown('<style>{}</style>'.format(f.read()), unsafe_allow_html=True)
@@ -88,3 +90,44 @@ def sort_images_by_number(image_paths):
         return 0  # fallback for files that don't match pattern
     
     return sorted(image_paths, key=extract_number)
+
+
+def blend_colors(colors, weights):
+    """
+    Blend multiple hex colors together using the specified weights.
+
+    Args:
+        colors (list of str): List of hex color strings (e.g., ['#FF0000', '#00FF00', '#0000FF']).
+        weights (list of float): List of weights for each color. Should be the same length as colors.
+
+    Returns:
+        str: The resulting blended color as a hex string (e.g., '#AABBCC').
+
+    Notes:
+        - The weights do not need to sum to 1; they will be normalized automatically.
+        - Colors are blended in RGB space.
+        - If the input lists are empty or mismatched, the function may raise an error.
+
+    Example:
+        >>> blend_colors(['#FF0000', '#0000FF'], [0.5, 0.5])
+        '#800080'
+    """
+    def hex_to_rgb(hex_color):
+        hex_color = hex_color.lstrip('#')
+        return tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
+
+    def rgb_to_hex(rgb):
+        return '#{:02X}{:02X}{:02X}'.format(*rgb)
+
+    total_weight = sum(weights)
+    normalized_weights = [w / total_weight for w in weights]
+
+    blended = [0, 0, 0]
+    for color, weight in zip(colors, normalized_weights):
+        rgb = hex_to_rgb(color)
+        blended[0] += rgb[0] * weight
+        blended[1] += rgb[1] * weight
+        blended[2] += rgb[2] * weight
+
+    blended_rgb = tuple(round(c) for c in blended)
+    return rgb_to_hex(blended_rgb)
