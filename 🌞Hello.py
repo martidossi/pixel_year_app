@@ -295,7 +295,7 @@ with col1:
     with st.expander('Side note on what I mean by “happy”'):
         st.info(
             "When I mark a day as happy, I don’t mean it was full of euphoria or peak moments. "
-            "It’s more about the background tone of the day —a general sense of ease, calm, "
+            "It’s more about the background tone of the day –a general sense of ease, calm, "
             "or simply feeling okay. The real spikes, both joyful and difficult, are captured "
             "separately with the smiley scale.", icon="ℹ️"
         )

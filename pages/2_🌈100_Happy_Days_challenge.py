@@ -124,7 +124,7 @@ inverse_legend_mapping = {v: k for k, v in legend_mapping.items()}
 st.sidebar.subheader('🔍 How to read')
 st.sidebar.markdown("""
     **Color legend**
-     – Below is the full list of categories and corresponding colors used to classify images.
+     – Below is the full list of categories and corresponding colors used to classify images
     """)
 
 #### SIDEBAR –START
