@@ -8,7 +8,7 @@ git+https://github.com/streamlit/gsheets-connection
 st_gsheets_connection==0.1.0
 st-annotated-text==4.0.2
 st-clickable-images==0.0.3
-plotly==5.22.0
+plotly==5.24.1
 pyyaml==6.0.1
 pywaffle==1.1.1
 opencv-python==4.10.0.84
