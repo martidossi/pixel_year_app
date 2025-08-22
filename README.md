@@ -9,22 +9,21 @@
 Visit [pixelyearapp.streamlit.app](https://pixelyearapp.streamlit.app/) to use the app directly in your browser –no installation required!
 
 ---
-🔍 Data is a lens through which we shape and interpret reality, bringing clarity to complex phenomena.
+🔍 Data acts as a lens that we can leverage to **unravel the world’s complexity**, turning what might seem chaotic and convoluted into something much more structured and transparent.
 
-✍️ Self-reported data shares the same goal, yet shifts the focus, from the external world to our inner reality, revealing a narrative of who we are and the story we carry within.
+✍️ **Self-reported data** serves the same purpose, yet shifts the focus inward, explaining facts with personal narratives that reveal who we are and the stories we carry within.
 
-🌟 In this context, data visualization becomes a powerful tool for self-discovery, helping us see patterns that might otherwise remain hidden.
+🌟 In this context, data visualization becomes a tool for **self-discovery**, helping us see patterns that might otherwise remain hidden. 
 
-🫐 Inspired by the concept of Data Humanism, this project explores the potential of small, subjective data. Over the past year (2024), on a daily basis, I have been collecting data on a few key indicators, without a predefined goal, just out of curiosity, to experiment and see where it might lead.
+🫐 Inspired by the concept of [Data Humanism](https://giorgialupi.com/data-humanism-my-manifesto-for-a-new-data-wold), this project explores the potential of small, subjective data. Over the past year (2024), I’ve been collecting data about my daily life that I found interesting –partly to better understand myself, reflect on the year once the collection is complete, and experiment with a new project without rigid goals. Working with personal data had been on my to-do list for some time, and I’m glad I finally took the plunge.
 
-🧶 The daily practice of tracking data has been a valuable discovery itself: I practiced consistency, learned that this consistency works best when I track only a few indicators, resisted the urge to introduce changes to keep the collection simple and coherent, cursed myself when I forgot one or more days, and felt the satisfaction of steady progress. With each small step, I discovered the true impact of the journey, which is only visible in hindsight.
+🧶 The **daily practice** of tracking data has been a valuable discovery itself: I practiced consistency, realized it works best when I focus on only a few features, resisted the urge to introduce changes to keep the collection simple and coherent,  cursed myself when I forgot one or more days, and felt the satisfaction of steady progress. 
 
-🫧 Some relationships I aim to explore—my personal research questions—include:
-- How do I feel throughout the year? Is there a correlation between my emotions and months, days, or weekends?
-- Are my emotions influenced by my physical location? For example, how does going to the office affect my mood?
-- Is there a connection between watching movies and my emotional state?
-- How do I feel on days when I have a headache?
-- What about cross-influences? For instance, do specific days of the year correlate with movies, or do cities and movies affect each other?
+🫧 Some of my initial research questions include:
+- How do emotions change throughout the year, across months, days, or weekends?
+- What are my favorite days and seasons, and how do these relate to mood? 
+- How does physical location or activities like watching movies influence my emotional state?
+- Are there surprising cross-influences, like certain days correlating with specific movies or moods?
 
 ## 🛠️ Getting started
 For local installation, follow the steps below.

@@ -327,6 +327,7 @@ st.markdown("""<hr style="height:1px; border:none; color:#333; background-color:
 
 # MOVIE VIZ
 st.subheader("🎬 Movies")
+
 col1, _ = st.columns([3, 1], gap='large')
 with col1:
     st.markdown("""
@@ -492,13 +493,98 @@ st.plotly_chart(fig_scatter, config=config_modebar, use_container_width=False)
 
 # Stats
 st.markdown("#### 🗂️ Data <br>", unsafe_allow_html=True)
-col1, col2, col3 = st.columns([1, 2, 1], gap='large')
+col1, col2, col3, _ = st.columns([1, 1, 3, 1], gap='small')
+with col1:
+    with st.container(border=True):
+        st.markdown("**🎞️ Total movies**")
+        st.markdown(f"""
+            <div style='font-size:2.5em; font-weight:400; margin-top:-0.2em; margin-bottom:0.1em;'>
+                {len(df_movies_plot)}
+            </div>
+        """, unsafe_allow_html=True)
+    with st.container(border=True):
+        top_cinemas = df_movies_plot['movie_cinema'].value_counts().head(3)
+        st.markdown("**🎪 Top cinemas**")
+        st.markdown(
+            """
+            <div style='line-height:1.5; margin-top:0.2em; margin-bottom:0.2em;'>
+            """ +
+            "<br>".join([f"<span style='font-size:0.9em; color:var(--text-secondary);'>{cinema}: {count}</span>" for cinema, count in top_cinemas.items()]) +
+            "</div>"
+            , unsafe_allow_html=True)
+    with st.container(border=True):
+        top_directors = df_movies_plot['movie_director'].value_counts().head(3)
+        st.markdown("**🎭 Top directors**")
+        # Use markdown with custom CSS for tighter spacing
+        st.markdown(
+            """
+            <div style='line-height:1.5; margin-top:0.2em; margin-bottom:0.2em;'>
+            """ +
+            "<br>".join([f"<span style='font-size:0.9em; color:var(--text-secondary);'>{director}: {count}</span>" for director, count in top_directors.items()]) +
+            "</div>"
+            , unsafe_allow_html=True)
 with col2:
+    with st.container(border=True):
+        top_emotions = df_movies['emotion'].value_counts()
+        st.markdown("**✨ Emotions**")
+        show_relative = st.toggle("Relative", value=False)
+
+        if show_relative:
+            # Relative mode
+            df_movies_emotion_count = (
+                df_movies["emotion"].value_counts().reset_index()
+            )
+            df_movies_emotion_count.columns = ["emotion", "movies_count"]
+
+            df_emotion_count = df_emotion["emotion"].value_counts().reset_index()
+            df_emotion_count.columns = ["emotion", "count"]
+
+            df_all_count = df_emotion_count.merge(
+                df_movies_emotion_count, on="emotion", how="outer"
+            )
+
+            df_all_count["movies_percentage"] = round(
+                (df_all_count["movies_count"] / df_all_count["count"]) * 100, 2
+            )
+            df_all_count = df_all_count.sort_values(by="movies_percentage", ascending=False)
+
+            top_emotions = (
+                df_all_count.set_index("emotion")["movies_percentage"]
+            )
+            is_percentage = True
+        else:
+            # Absolute mode
+            top_emotions = df_movies["emotion"].value_counts()
+            is_percentage = False
+
+        # Render
+        st.markdown(
+            "<div style='line-height:1.5; margin-top:0.2em; margin-bottom:0.2em;'>"
+            + "<br>".join(
+                [
+                    f"<span style='font-size:0.9em; color:var(--text-secondary);'>{emotion}: {count}{'%' if is_percentage else ''}</span>"
+                    for emotion, count in top_emotions.items()
+                ]
+            )
+            + "</div>",
+            unsafe_allow_html=True,
+        )
+    with st.container(border=True):
+        top_days = df_movies['weekday'].value_counts().head(3)
+        st.markdown("**📅 Top days of the week**")
+        st.markdown(
+            """
+            <div style='line-height:1.5; margin-top:0.2em; margin-bottom:0.2em;'>
+            """ +
+            "<br>".join([f"<span style='font-size:0.9em; color:var(--text-secondary);'>{day}: {count}</span>" for day, count in top_days.items()]) +
+            "</div>"
+            , unsafe_allow_html=True)
+with col3:
     selected_month = st.selectbox(
-        "Select a month:",
-        options=["All"] + list(dict_months.keys()),
-        index=0
-    )
+            "**Select a month:**",
+            options=["All"] + list(dict_months.keys()),
+            index=0
+        )
     if selected_month == "All":
         df_movie_show = df_movies_plot.copy()
     else:
@@ -526,9 +612,13 @@ with col2:
     )
     # df display properties
     df_movie_show["Release year"] = df_movie_show["Release year"].astype(int).astype(str)
-    col_config = {
-        "Date": st.column_config.DateColumn("Date", format="DD MMM YYYY")
-    }
+
+    # Format into desired output
+
+    df_movie_show['Date'] = df_movie_show["Date"].apply(
+        lambda x: datetime.datetime.strptime(str(x), "%Y-%m-%d %H:%M:%S").strftime("%d %b %Y")
+    )                                               
+
     styled_df = (
         df_movie_show
         .style
@@ -542,36 +632,7 @@ with col2:
             "max-width": "200px",  
         })
     )
-    st.dataframe(styled_df, column_config=col_config, height=300)
+    st.dataframe(styled_df)#, column_config=col_config) #, height=300)
 
-with col1:
-    with st.container(border=True):
-        st.markdown("**🎞️ Total movies**")
-        st.markdown(f"""
-            <div style='font-size:2.5em; font-weight:400; margin-top:-0.2em; margin-bottom:0.1em;'>
-                {len(df_movies_plot)}
-            </div>
-        """, unsafe_allow_html=True)
-    with st.container(border=True):
-        top_cinemas = df_movies_plot['movie_cinema'].value_counts().head(3)
-        st.markdown("**🎪 Top cinemas**")
-        #for cinema, count in top_cinemas.items():
-        #    st.caption(f"{cinema}: {count}")
-        st.markdown(
-            """
-            <div style='line-height:1.5; margin-top:0.2em; margin-bottom:0.2em;'>
-            """ +
-            "<br>".join([f"<span style='font-size:0.9em; color:var(--text-secondary);'>{cinema}: {count}</span>" for cinema, count in top_cinemas.items()]) +
-            "</div>"
-            , unsafe_allow_html=True)
-    with st.container(border=True):
-        top_directors = df_movies_plot['movie_director'].value_counts().head(3)
-        st.markdown("**🎭 Top directors**")
-        # Use markdown with custom CSS for tighter spacing
-        st.markdown(
-            """
-            <div style='line-height:1.5; margin-top:0.2em; margin-bottom:0.2em;'>
-            """ +
-            "<br>".join([f"<span style='font-size:0.9em; color:var(--text-secondary);'>{director}: {count}</span>" for director, count in top_directors.items()]) +
-            "</div>"
-            , unsafe_allow_html=True)
+
+# st.write(df_all_count.drop('count', axis=1).sort_values(by='movies_percentage', ascending=False))
