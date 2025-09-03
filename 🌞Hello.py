@@ -24,7 +24,7 @@ local_css("style.css")
 
 ## Setting
 st.set_page_config(
-    page_title="Hello",
+    page_title="Pixel Year Data Visualization",
     page_icon="🟧",
     layout="wide"
 )

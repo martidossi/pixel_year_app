@@ -349,7 +349,7 @@ st.markdown("#### When I watched movies (by month) vs. their release year")
 df_movies_plot.movie_companion = df_movies_plot.movie_companion.map(
     {
     "Alone": "Alone",
-    "Partner": "With a partner",
+    "Partner": "With partner",
     "Friends": "With friends",
     "Volunteering": "Volunteering",
     "Mom": "With my mom"
@@ -358,7 +358,7 @@ df_movies_plot.movie_companion = df_movies_plot.movie_companion.map(
 
 color_map = {
     "Alone": "#70c9ed",
-    "With a partner": "#e85050",
+    "With partner": "#e85050",
     "With friends": "#FF9F19",
     "Volunteering": "#CC79A7",
     "With my mom": "#0072B2" # "#5dc1a1"
